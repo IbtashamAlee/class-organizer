@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "heroku-postbuild": "cd client-app && yarn install && yarn build"
+    "heroku-postbuild": "cd client-app && npm install && npm run build"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.4.2",
