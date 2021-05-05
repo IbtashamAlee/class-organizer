@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www",
+    "heroku-postbuild": "cd client-app && yarn install && yarn build"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.4.2",
