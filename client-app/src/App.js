@@ -5,7 +5,7 @@ import axios from "axios";
 function App() {
     const [prods, setProds] = useState([]);
     useEffect(() => {
-        axios.get('http://localhost:4000/products').then(res=> {
+        axios.get('/products').then(res=> {
             setProds(res.data);
             console.log(res)
         }).catch(err=> {
