@@ -5,7 +5,6 @@ var logger = require('morgan');
 let mongoose = require("mongoose");
 require('dotenv').config();
 var passport = require("passport");
-
 const db = process.env.TEST_DB;
 mongoose.connect(db, {
     useNewUrlParser: true,
