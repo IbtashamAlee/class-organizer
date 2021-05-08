@@ -25,12 +25,15 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-/*app.use(express.static(path.join(__dirname, 'public')));*/
 
-app.use(express.static(path.join(__dirname, "client-app/build")));
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname + "/client-app/build/index.html"))
-})
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, "client-app/build")));
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname + "/client-app/build/index.html"))
+    })
+} else {
+    app.use(express.static(path.join(__dirname, 'public')));
+}
 
 //Passport middleware
 app.use(passport.initialize());
@@ -38,7 +41,7 @@ app.use(passport.initialize());
 //Config for JWT strategy
 require("./stratgies/jwt-strategy")(passport);
 
-//app.use('/', indexRouter);
+app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 module.exports = app;
