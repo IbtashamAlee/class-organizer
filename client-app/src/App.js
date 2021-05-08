@@ -15,7 +15,7 @@ function App() {
   return (
       <div>
           <ul>
-          { prods.map((prod, index)=> <li key={index}>{prod}</li>)}
+          {  <li key={index}>{prod}</li>)}
           </ul>
       </div>
   );
