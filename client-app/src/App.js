@@ -6,16 +6,20 @@ function App() {
     const [prods, setProds] = useState([]);
     useEffect(() => {
         axios.get('/products').then(res=> {
-            setProds(res);
+            setProds(res.data);
         }).catch(err=> {
             console.log(err);
         })
     },[])
   return (
       <div>
-         {/* {prods.map((p, index) => {
-              <p key={index}>{p}</p>
-          })}*/prods}
+          <ul>
+          {
+              prods.map((prod, index)=>
+                      <li key={index}>{prod}</li>
+              )
+          }
+          </ul>
       </div>
   );
 }
