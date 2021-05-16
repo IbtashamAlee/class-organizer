@@ -14,7 +14,7 @@ function App() {
     },[])
   return (
       <div>
-          <ul>
+          <ul class="bg-gray-600">
           { prods.map((prod, index)=> <li key={index}>{prod}</li>)}
           </ul>
       </div>
