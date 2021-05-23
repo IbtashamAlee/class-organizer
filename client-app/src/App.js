@@ -1,23 +1,23 @@
 import './App.css';
-import React, {useEffect, useState} from "react";
-import axios from "axios";
+import {Switch, BrowserRouter as Router, Route, Redirect} from 'react-router-dom'
+import React from 'react'
+import Home from "./components/home";
+import Footer from "./components/footer";
+import NotFound from "./components/not-found";
+import SignIn from "./components/signin";
 
 function App() {
-    const [prods, setProds] = useState([]);
-    useEffect(() => {
-        axios.get('/products').then(res=> {
-            setProds(res.data);
-            console.log(res)
-        }).catch(err=> {
-            console.log(err);
-        })
-    },[])
   return (
-      <div>
-          <ul class="bg-gray-600">
-          { prods.map((prod, index)=> <li key={index}>{prod}</li>)}
-          </ul>
-      </div>
+      <Router>
+          <Switch>
+              <Route path="/footer" component={Footer}/>
+              <Route path="/not-found" component={NotFound}/>
+              <Route path="/signin" component={SignIn}/>
+              <Route path="/" exact component={Home}/>
+
+              <Redirect to="/not-found"/>
+          </Switch>
+      </Router>
   );
 }
 
