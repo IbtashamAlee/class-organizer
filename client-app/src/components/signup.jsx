@@ -1,21 +1,24 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import { TextField, Button } from "@material-ui/core";
-class SignIn extends React.Component{
+class SignUp extends React.Component{
     constructor(props) {
         super(props);
         this.login = this.login.bind(this);
         this.state = {
             email: '',
+            username: '',
             password: '',
             error_text: ''
         }
     }
     login(event) {
-        if (this.state.email === '' || this.state.password === '') {
+        event.preventDefault();
+        if (this.state.email === '' || this.state.password === '' || this.state.username === '') {
             this.setState({error_text: 'This field is required'});
         } else this.setState({error_text: ''});
-        event.preventDefault();
+        // TODO uncomment this after adding dashboard
+        // this.props.history.push('/dashboard')
     }
     render() {
         return (
@@ -27,12 +30,12 @@ class SignIn extends React.Component{
                                 <img className="mx-auto h-12 w-auto"
                                      src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow"/>
                                 <h2 className="mt-6 text-center text-xl font-normal text-gray-900">
-                                    Sign in to your account
+                                    Sign up to your account
                                 </h2>
                                 <p className="mt-2 text-center text-sm text-gray-600 max-w">
                                     or &nbsp;
-                                    <Link to="/signup" className="font-medium text-indigo-600 hover:text-indigo-500">
-                                        Create new account
+                                    <Link to="/signin" className="font-medium text-indigo-600 hover:text-indigo-500">
+                                        Login with existing account
                                     </Link>
                                 </p>
                             </div>
@@ -50,6 +53,19 @@ class SignIn extends React.Component{
                                     error={this.state.email === '' && this.state.error_text !== ''}
                                     helperText={this.state.email === '' && this.state.error_text !== "" ? this.state.error_text : ''}
                                 />
+                                <TextField
+                                    value={this.state.username}
+                                    onChange={event => this.setState({username: event.target.value})}
+                                    className="block w-full"
+                                    id="username"
+                                    label="Username"
+                                    type="username"
+                                    autoComplete="current-username"
+                                    variant="outlined"
+
+                                    error={this.state.username === '' && this.state.error_text !== ''}
+                                    helperText={this.state.username === '' && this.state.error_text !== "" ? this.state.error_text : ''}
+                                />
                                 <div>
                                     <TextField
                                         value={this.state.password}
@@ -65,18 +81,10 @@ class SignIn extends React.Component{
                                     />
                                 </div>
 
-                                <div className="flex items-center justify-between">
-                                    <div className="text-sm">
-                                        <Link to="/forgotpassword" href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-                                            Forgot your password?
-                                        </Link>
-                                    </div>
-                                </div>
-
                                 <div>
                                     <Button onClick={this.login} variant="contained" color="primary" type="submit"
                                             className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                        Sign in
+                                        Sign up
                                     </Button>
                                 </div>
                             </form>
@@ -101,4 +109,4 @@ class SignIn extends React.Component{
     }
 }
 
-export default SignIn;
+export default SignUp;
