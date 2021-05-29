@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import { TextField, Button } from "@material-ui/core";
+import axios from "axios";
 class SignUp extends React.Component{
     constructor(props) {
         super(props);
@@ -16,7 +17,9 @@ class SignUp extends React.Component{
         event.preventDefault();
         if (this.state.email === '' || this.state.password === '' || this.state.username === '') {
             this.setState({error_text: 'This field is required'});
-        } else this.setState({error_text: ''});
+        } else {
+            axios.post()
+        }
         // TODO uncomment this after adding dashboard
         // this.props.history.push('/dashboard')
     }

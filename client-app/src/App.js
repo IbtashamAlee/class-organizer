@@ -8,19 +8,19 @@ import SignIn from "./components/signin";
 import SignUp from "./components/signup";
 
 function App() {
-  return (
-      <Router>
-          <Switch>
-              <Route path="/footer" component={Footer}/>
-              <Route path="/not-found" component={NotFound}/>
-              <Route path="/signin" component={SignIn}/>
-              <Route path="/signup" component={SignUp}/>
-              <Route path="/" exact component={Home}/>
+    return (
+        <Router>
+            <Switch>
+                <Route path="/footer" component={Footer}/>
+                <Route path="/not-found" component={NotFound}/>
+                <Route path="/signin" component={SignIn}/>
+                <Route path="/signup" component={SignUp}/>
+                <Route path="/" exact component={Home}/>
 
-              <Redirect to="/not-found"/>
-          </Switch>
-      </Router>
-  );
+                <Redirect to="/not-found"/>
+            </Switch>
+        </Router>
+    );
 }
 
 export default App;

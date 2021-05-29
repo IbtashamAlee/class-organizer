@@ -6,6 +6,7 @@ const jsonwt = require("jsonwebtoken");
 var bcrypt = require('bcrypt')
 
 router.post("/signup", async (req, res) => {
+    res.send(JSON.stringify(req.body));
   var newUser = new User({
     username: req.body.username,
     password: req.body.password
@@ -40,13 +41,13 @@ router.post("/signup", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   var newUser = {};
-  newUser.username = req.body.username;
+  newUser.email = req.body.email;
   newUser.password = req.body.password;
 
-  await User.findOne({ username: newUser.username })
+  await User.findOne({ username: newUser.email })
       .then(profile => {
         if (!profile) {
-          res.send("User not exist");
+          res.status(404).send("User not exist");
         } else {
           bcrypt.compare(
               newUser.password,
@@ -56,8 +57,8 @@ router.post("/login", async (req, res) => {
                   console.log("Error is", err.message);
                 } else if (result === true) {
                   const payload = {
-                    id: profile.id,
-                    username: profile.username
+                      id: profile.id,
+                      email: profile.email
                   };
                   jsonwt.sign(
                       payload,
