@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev-start": "npx kill-port 4000 && nodemon ./bin/www",
+    "start-dev": "nodemon ./bin/www",
     "heroku-postbuild": "cd client-app && npm install && npm run build"
   },
   "dependencies": {
@@ -19,5 +19,8 @@
     "nodemon": "^2.0.7",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0"
+  },
+  "devDependencies": {
+    "kill-port": "^1.6.1"
   }
 }
