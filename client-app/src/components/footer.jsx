@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from "react";
-
-import api from "../generics-services/api";
+import axios from "axios";
 
 function Footer() {
     const [prods, setProds] = useState([]);
     useEffect(() => {
-        api.get('/products').then(res=> {
+        axios.get('/products').then(res=> {
             setProds(res.data);
             console.log(res)
         }).catch(err=> {

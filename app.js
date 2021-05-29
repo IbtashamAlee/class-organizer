@@ -28,13 +28,13 @@ app.use(cookieParser());
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, "client-app/build")));
-    /*app.get('/!*', function(req, res) {
+    app.get('/*', function(req, res) {
         res.sendFile(path.join(__dirname, '/client-app/build/index.html'), function(err) {
             if (err) {
                 res.status(500).send(err)
             }
         })
-    })*/
+    })
    /* app.get("*", (req, res) => {
         res.sendFile(path.join(__dirname + "/client-app/build/index.html"))
     })*/
