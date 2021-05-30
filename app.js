@@ -28,6 +28,7 @@ app.use(cookieParser());
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, "client-app/build")));
+    app.use(express.static("public"));
     /*app.get('/!*', function(req, res) {
         res.sendFile(path.join(__dirname, '/client-app/build/index.html'), function(err) {
             if (err) {
@@ -38,6 +39,7 @@ if (process.env.NODE_ENV === 'production') {
    /* app.get("*", (req, res) => {
         res.sendFile(path.join(__dirname + "/client-app/build/index.html"))
     })*/
+
 } else {
     app.use(express.static(path.join(__dirname, 'public')));
 }
@@ -50,5 +52,8 @@ require("./stratgies/jwt-strategy")(passport);
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use((req, res, next) => {
+    res.sendFile(path.join(__dirname, ".", "client-app/build", "index.html"));
+});
 
 module.exports = app;

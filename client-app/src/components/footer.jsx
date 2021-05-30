@@ -1,24 +1,28 @@
 import React, {useEffect, useState} from "react";
-
-import api from "../generics-services/api";
+import axios from "axios";
 
 function Footer() {
     const [prods, setProds] = useState([]);
     useEffect(() => {
-        api.get('/products').then(res=> {
+        axios.get('/products').then(res=> {
             setProds(res.data);
             console.log(res)
         }).catch(err=> {
             console.log(err);
         })
-    },[])
-    return (
-        <div>
-            <ul className="bg-gray-600">
-                {prods.map((prod, index)=> <li key={index}>{prod}</li>)}
-            </ul>
-        </div>
-    );
+    },[]);
+    let itemsToRender;
+
+    if (prods) {
+        console.log(prods)
+        itemsToRender = prods.map(item => {
+            return <div key={item}>{item}</div>;
+        });
+    } else {
+        itemsToRender = "Loading...";
+    }
+
+    return <div>{itemsToRender}</div>
 }
 
 export default Footer;
