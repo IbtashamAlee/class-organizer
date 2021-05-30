@@ -6,13 +6,12 @@ const jsonwt = require("jsonwebtoken");
 var bcrypt = require('bcrypt')
 
 router.post("/signup", async (req, res) => {
-    res.send(JSON.stringify(req.body));
   var newUser = new User({
-    username: req.body.username,
+    email: req.body.email,
     password: req.body.password
   });
 
-  await User.findOne({ username: newUser.username })
+  await User.findOne({ username: newUser.email })
       .then(async profile => {
         if (!profile) {
           bcrypt.hash(newUser.password, Math.random(), async (err, hash) => {
@@ -39,12 +38,12 @@ router.post("/signup", async (req, res) => {
       });
 });
 
-router.post("/login", async (req, res) => {
+router.post("/signin", async (req, res) => {
   var newUser = {};
   newUser.email = req.body.email;
   newUser.password = req.body.password;
 
-  await User.findOne({ username: newUser.email })
+  await User.findOne({ email: newUser.email })
       .then(profile => {
         if (!profile) {
           res.status(404).send("User not exist");
@@ -70,7 +69,7 @@ router.post("/login", async (req, res) => {
                         }
                         res.json({
                           success: true,
-                          token: "Bearer " + token
+                          access_token: token
                         });
                       }
                   );
