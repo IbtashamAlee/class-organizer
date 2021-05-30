@@ -10,14 +10,19 @@ function Footer() {
         }).catch(err=> {
             console.log(err);
         })
-    },[])
-    return (
-        <div>
-            <ul className="bg-gray-600">
-                {prods.map((prod, index)=> <li key={index}>{prod}</li>)}
-            </ul>
-        </div>
-    );
+    },[]);
+    let itemsToRender;
+
+    if (prods) {
+        console.log(prods)
+        itemsToRender = prods.map(item => {
+            return <div key={item}>{item}</div>;
+        });
+    } else {
+        itemsToRender = "Loading...";
+    }
+
+    return <div>{itemsToRender}</div>
 }
 
 export default Footer;
