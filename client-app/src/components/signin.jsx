@@ -1,6 +1,8 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import { TextField, Button } from "@material-ui/core";
+import Api from '../generics-services/api.js'
+
 class SignIn extends React.Component{
     constructor(props) {
         super(props);
@@ -12,10 +14,17 @@ class SignIn extends React.Component{
         }
     }
     login(event) {
+        event.preventDefault();
         if (this.state.email === '' || this.state.password === '') {
             this.setState({error_text: 'This field is required'});
-        } else this.setState({error_text: ''});
-        event.preventDefault();
+        } else {
+            Api.execute('/users/signin', 'post', {
+                email: this.state.email,
+                password: this.state.password
+            }).then((res)=>{
+                console.log(res);
+            }).catch((err)=>{console.log(err)});
+        }
     }
     render() {
         return (
@@ -46,7 +55,6 @@ class SignIn extends React.Component{
                                     type="email"
                                     autoComplete="current-email"
                                     variant="outlined"
-
                                     error={this.state.email === '' && this.state.error_text !== ''}
                                     helperText={this.state.email === '' && this.state.error_text !== "" ? this.state.error_text : ''}
                                 />
