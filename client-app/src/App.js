@@ -6,6 +6,7 @@ import Footer from "./components/footer";
 import NotFound from "./components/not-found";
 import SignIn from "./components/signin";
 import SignUp from "./components/signup";
+import FAQ from "./components/faq";
 
 function App() {
     return (
@@ -15,6 +16,7 @@ function App() {
                 <Route path="/not-found" component={NotFound}/>
                 <Route path="/signin" component={SignIn}/>
                 <Route path="/signup" component={SignUp}/>
+                <Route path="/faq" component={FAQ}/>
                 <Route path="/" exact component={Home}/>
 
                 <Redirect to="/not-found"/>
