@@ -1,7 +1,8 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import { TextField, Button } from "@material-ui/core";
-import Api from '../generics-services/api.js'
+import axios from "axios";
+import qs from "qs";
 
 class SignIn extends React.Component{
     constructor(props) {
@@ -23,12 +24,26 @@ class SignIn extends React.Component{
         if (this.state.email === '' || this.state.password === '') {
             this.setState({error_text: 'This field is required'});
         } else {
-            Api.execute('/users/signin', 'post', {
-                email: this.state.email,
-                password: this.state.password
-            }).then((res)=>{
-                console.log(res);
-            }).catch((err)=>{console.log(err)});
+            axios({
+                method: 'post',
+                url: '/users/signin',
+                data: qs.stringify({
+                    email: this.state.email,
+                    password: this.state.password
+                }),
+                headers: {
+                    'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+                }
+            }).then((res) => {
+                if(res.status === 200) {
+                    localStorage.setItem('access_token', res.data.access_token);
+                    this.props.history.push('/dashboard');
+                } else {
+                    console.log(res);
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
         }
     }
     render() {
@@ -81,7 +96,7 @@ class SignIn extends React.Component{
 
                                 <div className="flex items-center justify-between">
                                     <div className="text-sm">
-                                        <Link to="/forgotpassword" href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+                                        <Link to="/forgotpassword" className="font-medium text-indigo-600 hover:text-indigo-500">
                                             Forgot your password?
                                         </Link>
                                     </div>

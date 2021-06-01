@@ -75,6 +75,7 @@ class SignUp extends React.Component{
                                     error={this.state.username === '' && this.state.error_text !== ''}
                                     helperText={this.state.username === '' && this.state.error_text !== "" ? this.state.error_text : ''}
                                 />
+
                                 <div>
                                     <TextField
                                         value={this.state.password}
@@ -89,6 +90,19 @@ class SignUp extends React.Component{
                                         helperText={this.state.password === '' && this.state.error_text !== "" ? this.state.error_text : ''}
                                     />
                                 </div>
+
+                                <TextField
+                                    value={this.state.password}
+                                    onChange={event => this.setState({password: event.target.value})}
+                                    className="block w-full"
+                                    id="confirm-password"
+                                    label="Confirm Password"
+                                    type="password"
+                                    autoComplete="current-password"
+                                    variant="outlined"
+                                    error={this.state.password === '' && this.state.error_text !== ''}
+                                    helperText={this.state.password === '' && this.state.error_text !== "" ? this.state.error_text : ''}
+                                />
 
                                 <div>
                                     <Button onClick={this.login} variant="contained" color="primary" type="submit"
