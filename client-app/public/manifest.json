@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Class Organizer",
+  "name": "A single platform to manage all of your class resources",
   "icons": [
     {
       "src": "favicon.ico",
