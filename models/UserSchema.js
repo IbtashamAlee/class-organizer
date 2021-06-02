@@ -5,16 +5,19 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    username: {
-        type: String,
+    isTutor: {
+        type: Boolean,
+        required: true
     },
     password: {
         type: String,
         required: true
     },
-    fullname: {
-        type: String
-    }
+    fullname: String,
+    username: String,
+    avatar: String,
+    contact: String,
+    websiteUrl: String,
 })
 
 module.exports = User = mongoose.model('userschema', userSchema);

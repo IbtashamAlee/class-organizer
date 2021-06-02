@@ -18,6 +18,7 @@ mongoose.connect(db, {
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var classesRouter = require('./routes/classes');
 
 var app = express();
 
@@ -52,6 +53,7 @@ require("./stratgies/jwt-strategy")(passport);
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/classes', classesRouter);
 app.use((req, res, next) => {
     res.sendFile(path.join(__dirname, ".", "client-app/build", "index.html"));
 });
