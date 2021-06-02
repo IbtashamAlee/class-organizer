@@ -6,94 +6,99 @@ const jsonwt = require("jsonwebtoken");
 var bcrypt = require('bcrypt')
 
 router.post("/signup", async (req, res) => {
-  var newUser = new User({
-    email: req.body.email,
-    password: req.body.password
-  });
+    let tutor = false;
+    if (req.body.isTutor === 'true') {
+        tutor = true;
+    }
+    var newUser = new User({
+        email: req.body.email,
+        password: req.body.password,
+        isTutor: tutor
+    });
 
-  await User.findOne({ username: newUser.email })
-      .then(async profile => {
-        if (!profile) {
-          bcrypt.hash(newUser.password, Math.random(), async (err, hash) => {
-            if (err) {
-              console.log("Error is", err.message);
+    await User.findOne({username: newUser.email})
+        .then(async profile => {
+            if (!profile) {
+                bcrypt.hash(newUser.password, Math.random(), async (err, hash) => {
+                    if (err) {
+                        console.log("Error is", err.message);
+                    } else {
+                        newUser.password = hash;
+                        await newUser
+                            .save()
+                            .then(() => {
+                                res.status(200).send(newUser);
+                            })
+                            .catch(err => {
+                                console.log("Error is ", err.message);
+                            });
+                    }
+                });
             } else {
-              newUser.password = hash;
-              await newUser
-                  .save()
-                  .then(() => {
-                    res.status(200).send(newUser);
-                  })
-                  .catch(err => {
-                    console.log("Error is ", err.message);
-                  });
+                res.send("User already exists...");
             }
-          });
-        } else {
-          res.send("User already exists...");
-        }
-      })
-      .catch(err => {
-        console.log("Error is", err.message);
-      });
+        })
+        .catch(err => {
+            console.log("Error is", err.message);
+        });
 });
 
 router.post("/signin", async (req, res) => {
-  var newUser = {};
-  newUser.email = req.body.email;
-  newUser.password = req.body.password;
+    var newUser = {};
+    newUser.email = req.body.email;
+    newUser.password = req.body.password;
 
-  await User.findOne({ email: newUser.email })
-      .then(profile => {
-        if (!profile) {
-          res.status(404).send("User not exist");
-        } else {
-          bcrypt.compare(
-              newUser.password,
-              profile.password,
-              async (err, result) => {
-                if (err) {
-                  console.log("Error is", err.message);
-                } else if (result === true) {
-                  const payload = {
-                      id: profile.id,
-                      email: profile.email
-                  };
-                  jsonwt.sign(
-                      payload,
-                      process.env.MY_SECRET_KEY,
-                      { expiresIn: 3600 },
-                      (err, token) => {
+    await User.findOne({email: newUser.email})
+        .then(profile => {
+            if (!profile) {
+                res.status(404).send("User not exist");
+            } else {
+                bcrypt.compare(
+                    newUser.password,
+                    profile.password,
+                    async (err, result) => {
                         if (err) {
-                          console.log("Error is ", err.message);
+                            console.log("Error is", err.message);
+                        } else if (result === true) {
+                            const payload = {
+                                id: profile.id,
+                                email: profile.email
+                            };
+                            jsonwt.sign(
+                                payload,
+                                process.env.MY_SECRET_KEY,
+                                {expiresIn: 3600},
+                                (err, token) => {
+                                    if (err) {
+                                        console.log("Error is ", err.message);
+                                    }
+                                    res.json({
+                                        success: true,
+                                        access_token: token
+                                    });
+                                }
+                            );
+                        } else {
+                            res.status(401).send("User Unauthorized Access");
                         }
-                        res.json({
-                          success: true,
-                          access_token: token
-                        });
-                      }
-                  );
-                } else {
-                  res.send("User Unauthorized Access");
-                }
-              }
-          );
-        }
-      })
-      .catch(err => {
-        console.log("Error is ", err.message);
-      });
+                    }
+                );
+            }
+        })
+        .catch(err => {
+            console.log("Error is ", err.message);
+        });
 });
 
-router.post('/resetpassword', async (req,res)=> {
+router.post('/resetpassword', async (req, res) => {
 
 })
 
-router.get('/me', function(req, res) {
+router.get('/me', function (req, res) {
     var token = req.headers['x-access-token'];
-    if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
-    jsonwt.verify(token, process.env.MY_SECRET_KEY, function(err, decoded) {
-        if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+    if (!token) return res.status(401).send({auth: false, message: 'No token provided.'});
+    jsonwt.verify(token, process.env.MY_SECRET_KEY, function (err, decoded) {
+        if (err) return res.status(500).send({auth: false, message: 'Failed to authenticate token.'});
 
         res.status(200).send(decoded);
     });
@@ -123,12 +128,12 @@ router.post('/reset', (req, res) => {
 
 router.get(
     "/profile",
-    passport.authenticate("jwt", { session: false }),
+    passport.authenticate("jwt", {session: false}),
     (req, res) => {
-      res.send({
-        id: req.user.id,
-        username: req.user.username
-      });
+        res.send({
+            id: req.user.id,
+            username: req.user.username
+        });
     }
 );
 module.exports = router;
