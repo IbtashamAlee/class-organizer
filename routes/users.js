@@ -11,7 +11,7 @@ router.post("/signup", async (req, res) => {
     password: req.body.password
   });
 
-  await User.findOne({ username: newUser.email })
+  await User.findOne({ email: newUser.email })
       .then(async profile => {
         if (!profile) {
           bcrypt.hash(newUser.password, Math.random(), async (err, hash) => {
@@ -22,7 +22,7 @@ router.post("/signup", async (req, res) => {
               await newUser
                   .save()
                   .then(() => {
-                    res.status(200).send(newUser);
+                    res.sendStatus(200);
                   })
                   .catch(err => {
                     console.log("Error is ", err.message);
@@ -30,7 +30,7 @@ router.post("/signup", async (req, res) => {
             }
           });
         } else {
-          res.send("User already exists...");
+          res.status(409).send("User already exists...");
         }
       })
       .catch(err => {
@@ -46,7 +46,7 @@ router.post("/signin", async (req, res) => {
   await User.findOne({ email: newUser.email })
       .then(profile => {
         if (!profile) {
-          res.status(404).send("User not exist");
+          res.sendStatus(404);
         } else {
           bcrypt.compare(
               newUser.password,
@@ -74,7 +74,7 @@ router.post("/signin", async (req, res) => {
                       }
                   );
                 } else {
-                  res.send("User Unauthorized Access");
+                  res.sendStatus(401);
                 }
               }
           );
