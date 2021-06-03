@@ -97,7 +97,7 @@ export default function Header(props) {
                                     <Button className="my-4" style={{marginTop: "1rem",marginBottom: "1rem"}}>
                                         <Link to="#product">Product</Link>
                                     </Button>
-                                    <Button className="my-4">
+                                    <Button className="my-4" style={{marginTop: "1rem",marginBottom: "1rem"}}>
                                         <Link to="#features">Features</Link>
                                     </Button>
                                 </div>
