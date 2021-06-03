@@ -1,6 +1,7 @@
 import React from 'react'
 import {Link} from "react-router-dom";
 import Header from "./layout/header";
+import Footer from "./footer";
 
 const Home = () => {
     return (
@@ -49,33 +50,10 @@ const Home = () => {
                                         <span className="sr-only">Close menu</span>
                                         <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
                                              viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                                                   d="M6 18L18 6M6 6l12 12"/>
                                         </svg>
                                     </button>
-                                </div>
-                            </div>
-                            <div role="menu" aria-orientation="vertical" aria-labelledby="main-menu">
-                                <div className="px-2 pt-2 pb-3" role="none">
-                                    <a href="#"
-                                       className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-                                       role="menuitem">Product</a>
-                                    <a href="#"
-                                       className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-                                       role="menuitem">Features</a>
-                                    <a href="#"
-                                       className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-                                       role="menuitem">Marketplace</a>
-                                    <a href="#"
-                                       className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-                                       role="menuitem">Company</a>
-                                </div>
-                                <div role="none">
-                                    <a href="#"
-                                       className="block w-full px-5 py-3 text-center font-medium text-indigo-600 bg-gray-50 hover:bg-gray-100"
-                                       role="menuitem">
-                                        Log in
-                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -87,21 +65,21 @@ const Home = () => {
                                 <span className="block text-indigo-600 xl:inline"><span>&#160;</span>class organizer</span>
                             </h1>
                             <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-                                Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat
-                                commodo. Elit sunt amet fugiat veniam occaecat fugiat aliqua.
+                                A free and easy tool helping educators efficiently manage and assess progress,
+                                while enhancing connections with learners from school, from home, or on the go.
                             </p>
                             <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
                                 <div className="rounded-md shadow">
-                                    <a href="#"
-                                       className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10">
+                                    <Link to="/signup" className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10">
                                         Sign up
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
                     </main>
                 </div>
             </div>
+            <Footer/>
         </div>
     )
 }
