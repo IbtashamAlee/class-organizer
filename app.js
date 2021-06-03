@@ -6,7 +6,7 @@ let mongoose = require("mongoose");
 require('dotenv').config();
 var passport = require("passport");
 
-const db = "mongodb://localhost:27017/testdb";
+const db = process.env.TEST_DB;
 mongoose.connect(db, {
     useNewUrlParser: true,
     useUnifiedTopology: true
