@@ -1,7 +1,10 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import { TextField, Button } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import axios from "axios";
+import qs from "querystring";
+import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
+
 class SignUp extends React.Component{
     constructor(props) {
         super(props);
@@ -10,7 +13,8 @@ class SignUp extends React.Component{
             email: '',
             username: '',
             password: '',
-            error_text: ''
+            error_text: '',
+            success_text: ''
         }
     }
 
@@ -20,13 +24,27 @@ class SignUp extends React.Component{
 
     login(event) {
         event.preventDefault();
-        if (this.state.email === '' || this.state.password === '' || this.state.username === '') {
-            this.setState({error_text: 'This field is required'});
-        } else {
-            axios.post()
-        }
-        // TODO uncomment this after adding dashboard
-        // this.props.history.push('/dashboard')
+        this.setState({error_text: ""})
+        this.setState({success_text: ""})
+        axios({
+            method: 'post',
+            url: '/users/signup',
+            data: qs.stringify({
+                email: this.state.email,
+                username: this.state.username,
+                password: this.state.password
+            }),
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+            }}).then((res) => {
+                this.setState({email: ""});
+                this.setState({username: ""});
+                this.setState({password: ""})
+                this.setState({success_text: "Account created successfully. Please login to continue."})
+        }).catch((err) => {
+            this.setState({error_text: "User already exists!"})
+
+        })
     }
     render() {
         return (
@@ -48,8 +66,8 @@ class SignUp extends React.Component{
                                     </Link>
                                 </p>
                             </div>
-                            <form className="space-y-6" action="/">
-                                <TextField
+                            <ValidatorForm className="space-y-6" onSubmit={this.login}>
+                                <TextValidator
                                     value={this.state.email}
                                     onChange={event => this.setState({email: event.target.value})}
                                     className="block w-full"
@@ -58,11 +76,10 @@ class SignUp extends React.Component{
                                     type="email"
                                     autoComplete="current-email"
                                     variant="outlined"
-
-                                    error={this.state.email === '' && this.state.error_text !== ''}
-                                    helperText={this.state.email === '' && this.state.error_text !== "" ? this.state.error_text : ''}
+                                    validators={['required', 'isEmail']}
+                                    errorMessages={['This field is required', 'Email is not valid']}
                                 />
-                                <TextField
+                                <TextValidator
                                     value={this.state.username}
                                     onChange={event => this.setState({username: event.target.value})}
                                     className="block w-full"
@@ -71,13 +88,12 @@ class SignUp extends React.Component{
                                     type="username"
                                     autoComplete="current-username"
                                     variant="outlined"
-
-                                    error={this.state.username === '' && this.state.error_text !== ''}
-                                    helperText={this.state.username === '' && this.state.error_text !== "" ? this.state.error_text : ''}
-                                />
+                                    validators={['required']}
+                                    errorMessages={['This field is required']}
+                                    />
 
                                 <div>
-                                    <TextField
+                                    <TextValidator
                                         value={this.state.password}
                                         onChange={event => this.setState({password: event.target.value})}
                                         className="block w-full"
@@ -86,31 +102,21 @@ class SignUp extends React.Component{
                                         type="password"
                                         autoComplete="current-password"
                                         variant="outlined"
-                                        error={this.state.password === '' && this.state.error_text !== ''}
-                                        helperText={this.state.password === '' && this.state.error_text !== "" ? this.state.error_text : ''}
+                                        validators={['required']}
+                                        errorMessages={['This field is required']}
                                     />
                                 </div>
-
-                                <TextField
-                                    value={this.state.password}
-                                    onChange={event => this.setState({password: event.target.value})}
-                                    className="block w-full"
-                                    id="confirm-password"
-                                    label="Confirm Password"
-                                    type="password"
-                                    autoComplete="current-password"
-                                    variant="outlined"
-                                    error={this.state.password === '' && this.state.error_text !== ''}
-                                    helperText={this.state.password === '' && this.state.error_text !== "" ? this.state.error_text : ''}
-                                />
-
+                                {this.state.error_text ?
+                                    <p className="text-red-500 mt-2 text-sm">{this.state.error_text}</p>:
+                                    <p className="text-green-500 mt-2 text-sm">{this.state.success_text}</p>
+                                }
                                 <div>
-                                    <Button onClick={this.login} variant="contained" color="primary" type="submit"
+                                    <Button variant="contained" color="primary" type="submit"
                                             className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                         Sign up
                                     </Button>
                                 </div>
-                            </form>
+                            </ValidatorForm>
 
                             <div className="mt-6 hidden">
                                 <div className="relative">

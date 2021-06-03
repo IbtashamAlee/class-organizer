@@ -1,8 +1,9 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import { TextField, Button } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import axios from "axios";
-import qs from "qs";
+import qs from 'querystring'
+import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 
 class SignIn extends React.Component{
     constructor(props) {
@@ -21,30 +22,26 @@ class SignIn extends React.Component{
 
     login(event) {
         event.preventDefault();
-        if (this.state.email === '' || this.state.password === '') {
-            this.setState({error_text: 'This field is required'});
-        } else {
-            axios({
-                method: 'post',
-                url: '/users/signin',
-                data: qs.stringify({
-                    email: this.state.email,
-                    password: this.state.password
-                }),
-                headers: {
-                    'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
-                }
-            }).then((res) => {
-                if(res.status === 200) {
-                    localStorage.setItem('access_token', res.data.access_token);
-                    this.props.history.push('/dashboard');
-                } else {
-                    console.log(res);
-                }
-            }).catch((err) => {
-                console.log(err);
-            })
-        }
+        axios({
+            method: 'post',
+            url: '/users/signin',
+            data: qs.stringify({
+                email: this.state.email,
+                password: this.state.password
+            }),
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+            }
+        }).then((res) => {
+            if(res.status === 200) {
+                localStorage.setItem('access_token', res.data.access_token);
+                this.props.history.push('/dashboard');
+            } else {
+                console.log(res);
+            }
+        }).catch((err) => {
+            this.setState({error_text: "The password is invalid or the user does not exists!"})
+        })
     }
     render() {
         return (
@@ -66,49 +63,50 @@ class SignIn extends React.Component{
                                     </Link>
                                 </p>
                             </div>
-                            <form className="space-y-6" action="/">
-                                <TextField
-                                    value={this.state.email}
-                                    onChange={event => this.setState({email: event.target.value})}
+                            <ValidatorForm
+                                onSubmit={this.login}
+                                onError={errors => console.log(errors)}
+                                className="space-y-6" action="/">
+                                <TextValidator
                                     className="block w-full"
                                     id="email"
                                     label="Email"
-                                    type="email"
+                                    onChange={event => this.setState({email: event.target.value})}
+                                    name="email"
                                     autoComplete="current-email"
                                     variant="outlined"
-                                    error={this.state.email === '' && this.state.error_text !== ''}
-                                    helperText={this.state.email === '' && this.state.error_text !== "" ? this.state.error_text : ''}
+                                    value={this.state.email}
+                                    validators={['required', 'isEmail']}
+                                    errorMessages={['This field is required', 'Email is not valid']}
+                                />
+                                <TextValidator
+                                    value={this.state.password}
+                                    onChange={event => this.setState({password: event.target.value})}
+                                    className="block w-full"
+                                    id="password"
+                                    label="Password"
+                                    type="password"
+                                    autoComplete="current-password"
+                                    variant="outlined"
+                                    validators={['required']}
+                                    errorMessages={['This field is required']}
                                 />
                                 <div>
-                                    <TextField
-                                        value={this.state.password}
-                                        onChange={event => this.setState({password: event.target.value})}
-                                        className="block w-full"
-                                        id="password"
-                                        label="Password"
-                                        type="password"
-                                        autoComplete="current-password"
-                                        variant="outlined"
-                                        error={this.state.password === '' && this.state.error_text !== ''}
-                                        helperText={this.state.password === '' && this.state.error_text !== "" ? this.state.error_text : ''}
-                                    />
-                                </div>
-
-                                <div className="flex items-center justify-between">
                                     <div className="text-sm">
                                         <Link to="/forgotpassword" className="font-medium text-indigo-600 hover:text-indigo-500">
                                             Forgot your password?
                                         </Link>
                                     </div>
+                                    <p className="text-red-500 mt-2 text-sm">{this.state.error_text}</p>
                                 </div>
 
                                 <div>
-                                    <Button onClick={this.login} variant="contained" color="primary" type="submit"
+                                    <Button variant="contained" color="primary" type="submit"
                                             className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                         Sign in
                                     </Button>
                                 </div>
-                            </form>
+                            </ValidatorForm>
 
                             <div className="mt-6 hidden">
                                 <div className="relative">
