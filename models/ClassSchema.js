@@ -10,7 +10,10 @@ const ClassSchema = mongoose.Schema({
         required: true,
     },
     annoucements: Array,
-    todos: Array
+    todos: Array,
+    assignments: {
+        type: Object
+    }
 })
 
 module.exports = Class = mongoose.model('classschema', ClassSchema);
