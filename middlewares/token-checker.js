@@ -1,3 +1,4 @@
+let jwt = require('jsonwebtoken');
 function checkToken(req,res,next){
     //Auth header value = > send token into header
 
@@ -12,9 +13,14 @@ function checkToken(req,res,next){
 
         //set the token
         req.token = bearerToken;
-
-        //next middleweare
-        next();
+        jwt.verify(req.token, process.env.MY_SECRET_KEY, (err, result) => {
+            if(err) {
+                res.sendStatus(401);
+            } else {
+                //next middleweare
+                next();
+            }
+        })
 
     }else{
         //Fobidden
