@@ -7,6 +7,7 @@ let jwt = require('jsonwebtoken');
 let getId = require('../validation-functions/get-id');
 let Counter = require('../models/CounterSchema')
 
+// add new class
 router.post('/add', checkToken, async (req, res) => {
     let addClass = new Class({
         name: req.body.name,
@@ -19,6 +20,17 @@ router.post('/add', checkToken, async (req, res) => {
     });
 })
 
+// delete class
+router.delete('/', checkToken, async (req, res) => {
+    await Class.findOne({_id: req.body.id}).then(delClass => {
+        delClass.remove();
+        res.sendStatus(200);
+    }).catch(err => {
+        res.sendStatus(409);
+    })
+})
+
+// get classes
 router.post('/', checkToken, async (req,res) => {
     let token = jwt.decode(req.token);
     let allClasses;
@@ -30,11 +42,11 @@ router.post('/', checkToken, async (req,res) => {
     });
 })
 
+// add new announcement
 router.post('/announcement', checkToken, async (req, res) => {
     let _class;
     let counter;
     Counter.findByIdAndUpdate({_id: req.body.class_id}, {$inc: { announcement_counter: 1} }, {new: true, upsert: true}).then(function(count) {
-    console.log("...count: "+JSON.stringify(count));
     }).catch(err =>{
         console.log(err);
     })
@@ -61,12 +73,20 @@ router.post('/announcement', checkToken, async (req, res) => {
     })
 })
 
-router.delete('/', checkToken, async (req, res) => {
-    await Class.findOne({_id: req.body.id}).then(delClass => {
-        delClass.remove();
+// delete announcement
+router.delete('/announcement', checkToken, async (req, res) => {
+    Class.findOne({_id: req.body.class_id}).then(_class => {
+        let announcement = _class.annoucements.filter(item => item.id === parseInt(req.body.announcement_id));
+        if (announcement.length === 0) {
+            res.status(404).send("Unable to find announcement!");
+            return;
+        }
+        let announcement_index = _class.annoucements.indexOf(announcement[0]);
+        _class.annoucements.splice(announcement_index, 1);
+        _class.save();
         res.sendStatus(200);
-    }).catch(err => {
-        res.sendStatus(409);
+    }).catch(() => {
+        res.sendStatus(404);
     })
 })
 
