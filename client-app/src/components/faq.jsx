@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Footer from "./footer";
+import Footer from "./layout/footer";
 function FAQ() {
     const [question, setquestion] = useState(0);
     return (
