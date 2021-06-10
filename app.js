@@ -9,7 +9,8 @@ var passport = require("passport");
 const db = process.env.TEST_DB;
 mongoose.connect(db, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 }).then(() => {
     console.log("Database is connected");
 }).catch(err => {
@@ -30,17 +31,6 @@ app.use(cookieParser());
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, "client-app/build")));
     app.use(express.static("public"));
-    /*app.get('/!*', function(req, res) {
-        res.sendFile(path.join(__dirname, '/client-app/build/index.html'), function(err) {
-            if (err) {
-                res.status(500).send(err)
-            }
-        })
-    })*/
-   /* app.get("*", (req, res) => {
-        res.sendFile(path.join(__dirname + "/client-app/build/index.html"))
-    })*/
-
 } else {
     app.use(express.static(path.join(__dirname, 'public')));
 }
