@@ -16,8 +16,9 @@ router.post("/signup", async (req, res) => {
         isTutor: tutor
     });
 
-    await User.findOne({username: newUser.email})
+    await User.findOne({email: newUser.email})
         .then(async profile => {
+            console.log(profile);
             if (!profile) {
                 bcrypt.hash(newUser.password, Math.random(), async (err, hash) => {
                     if (err) {
@@ -27,7 +28,7 @@ router.post("/signup", async (req, res) => {
                         await newUser
                             .save()
                             .then(() => {
-                                res.status(200).send(newUser);
+                                res.status(200);
                             })
                             .catch(err => {
                                 console.log("Error is ", err.message);
@@ -35,7 +36,7 @@ router.post("/signup", async (req, res) => {
                     }
                 });
             } else {
-                res.send("User already exists...");
+                res.status(403).send("User already exists...");
             }
         })
         .catch(err => {
