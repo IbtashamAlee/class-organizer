@@ -1,24 +1,9 @@
-import React from 'react'
-import {Button} from "@material-ui/core";
-import {useHistory} from 'react-router-dom'
+import React from "react";
 
-const Dashboard = ()=> {
-    let history = useHistory();
-
-    function logout() {
-        localStorage.clear();
-        history.push('/dashboard');
+export default class Dashboard {
+    render() {
+        return(
+            <div></div>
+        )
     }
-
-    return(
-        <div>
-            You are logged In. <br/>
-            Dashboard empty!
-
-            <div>
-                <Button variant="contained" color="primary" onClick={logout}>Logout</Button>
-            </div>
-        </div>
-    )
 }
-export default Dashboard;
