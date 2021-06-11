@@ -9,7 +9,8 @@ var passport = require("passport");
 const db = process.env.TEST_DB;
 mongoose.connect(db, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 }).then(() => {
     console.log("Database is connected");
 }).catch(err => {
@@ -18,6 +19,7 @@ mongoose.connect(db, {
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var classesRouter = require('./routes/classes');
 
 var app = express();
 
@@ -29,17 +31,6 @@ app.use(cookieParser());
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, "client-app/build")));
     app.use(express.static("public"));
-    /*app.get('/!*', function(req, res) {
-        res.sendFile(path.join(__dirname, '/client-app/build/index.html'), function(err) {
-            if (err) {
-                res.status(500).send(err)
-            }
-        })
-    })*/
-   /* app.get("*", (req, res) => {
-        res.sendFile(path.join(__dirname + "/client-app/build/index.html"))
-    })*/
-
 } else {
     app.use(express.static(path.join(__dirname, 'public')));
 }
@@ -52,6 +43,7 @@ require("./stratgies/jwt-strategy")(passport);
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/classes', classesRouter);
 app.use((req, res, next) => {
     res.sendFile(path.join(__dirname, ".", "client-app/build", "index.html"));
 });
