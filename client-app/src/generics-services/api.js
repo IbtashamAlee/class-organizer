@@ -1,28 +1,16 @@
-/*import axios from "axios";
-
-class Api {
-    get = (url) => {
-        return new Promise( (resolve, reject) =>  {
-            axios.get(url).then(res => {
-                console.log(res);
-                resolve(res.data)
-            }).catch(err => {
-                reject(err)
-            })
-        })
-    }
-}*/
-
-
 import axios from "axios";
 import qs from "qs";
 
-class Api {
-    constructor() {
+const authAxios = axios.create({
+    headers: {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`
     }
+})
+
+class Api {
     execute(url,method, data={}) {
         return new Promise(function (resolve, reject) {
-            axios({
+            authAxios({
                 method: method,
                 url: url,
                 data: qs.stringify(data),
@@ -34,6 +22,16 @@ class Api {
             }).catch((err) =>{
                 reject(err);
             })
+        })
+    }
+
+    get(url) {
+        return new Promise((resolve, reject )=> {
+            axios.get(url).then(res => {
+                resolve(res);
+            }).catch(err => {
+                reject(err);
+            });
         })
     }
 }
