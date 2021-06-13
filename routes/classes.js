@@ -9,10 +9,13 @@ let Counter = require('../models/CounterSchema');
 const isTutor = require('../middlewares/is-tutor')
 
 // add new class
-router.post('/add', checkToken, isTutor, async (req, res) => {
+router.post('/', checkToken, isTutor, async (req, res) => {
     let addClass = new Class({
         name: req.body.name,
-        userid: getId(req.token)
+        userid: getId(req.token),
+        section: req.body.section,
+        details: req.body.details,
+        image: req.body.image
     })
     addClass.save().then(() => {
         res.sendStatus(200);
@@ -39,7 +42,17 @@ router.get('/', checkToken, isTutor, async (req,res) => {
         allClasses = classes;
         res.send(allClasses);
     }).catch(err => {
-        res.sendStatus(409);
+        res.sendStatus(404);
+    });
+})
+
+router.get('/byid', checkToken, isTutor, async (req,res) => {
+    let allClasses;
+    await Class.findOne({_id: req.body.classid}).then(async classes => {
+        allClasses = classes;
+        res.send(allClasses);
+    }).catch(err => {
+        res.sendStatus(404);
     });
 })
 
