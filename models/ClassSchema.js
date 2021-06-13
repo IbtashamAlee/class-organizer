@@ -11,8 +11,11 @@ const ClassSchema = mongoose.Schema({
     },
     annoucements: Array,
     todos: Array,
+    image: String,
+    section: String,
+    details: String,
     assignments: {
-        type: Object
+        type: Array
     }
 })
 
