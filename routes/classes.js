@@ -32,12 +32,12 @@ router.delete('/', checkToken, isTutor, async (req, res) => {
 })
 
 // get classes
-router.post('/', checkToken, isTutor, async (req,res) => {
+router.get('/', checkToken, isTutor, async (req,res) => {
     let token = jwt.decode(req.token);
     let allClasses;
     await Class.find({userid: token.id}).then(async classes => {
         allClasses = classes;
-        res.send(JSON.stringify(allClasses));
+        res.send(allClasses);
     }).catch(err => {
         res.sendStatus(409);
     });
