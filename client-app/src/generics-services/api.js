@@ -1,5 +1,6 @@
 import axios from "axios";
 import qs from "qs";
+import auth from "../auth";
 
 const authAxios = axios.create({
     headers: {
@@ -20,6 +21,9 @@ class Api {
             }).then((res) =>{
                 resolve(res);
             }).catch((err) =>{
+                if (err.response.status === 401) {
+                    auth.logout();
+                }
                 reject(err);
             })
         })

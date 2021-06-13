@@ -8,18 +8,25 @@ import SignUp from "./components/signup";
 import FAQ from "./components/faq";
 import Dashboard from "./components/dashboard";
 import {ProtectedRoute} from "./protected-route";
+import auth from "./auth";
 
 function App() {
     return (
         <Router>
             <Switch>
                 <Route path="/not-found" component={NotFound}/>
-                <Route path="/signin" component={SignIn}/>
-                <Route path="/signup" component={SignUp}/>
+                <Route exact path="/signin">
+                    {auth.isAuthenticated() ? <Redirect to="/dashboard" /> : <SignIn/>}
+                </Route>
+                <Route exact path="/signup">
+                    {auth.isAuthenticated() ? <Redirect to="/dashboard" /> : <SignUp/>}
+                </Route>
                 <Route path="/faq" component={FAQ}/>
 
                 <ProtectedRoute exact path="/dashboard" component={Dashboard} />
-                <Route path="/" exact component={Home}/>
+                <Route exact path="/">
+                    {auth.isAuthenticated() ? <Redirect to="/dashboard" /> : <Home/>}
+                </Route>
 
                 <Redirect to="/not-found"/>
             </Switch>
