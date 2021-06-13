@@ -1,24 +1,42 @@
-import React from 'react'
-import {Button} from "@material-ui/core";
-import {useHistory} from 'react-router-dom'
+import React from "react";
+import Header from "./layout/header";
+import MediaCard from "./layout/card";
+import Api from '../generics-services/api'
 
-const Dashboard = ()=> {
-    let history = useHistory();
-
-    function logout() {
-        localStorage.clear();
-        history.push('/dashboard');
+export default class Dashboard extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            classes: []
+        }
     }
 
-    return(
-        <div>
-            You are logged In. <br/>
-            Dashboard empty!
+    getClasses() {
+        Api.execute('/classes', 'get').then((res) => {
+            this.setState({classes: res.data})
+        }).catch(err => {
+            console.log(err);
+        })
+    }
 
+    componentDidMount() {
+        this.getClasses();
+    }
+
+    render() {
+        return(
             <div>
-                <Button variant="contained" color="primary" onClick={logout}>Logout</Button>
+                <Header/>
+                <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-4 md:max-w-3xl lg:max-w-6xl mx-auto md:mt-28 xl:mt-10">
+                    {this.state.classes.length &&
+                    this.state.classes.map((item) => (
+                        <MediaCard className="mx-auto" key={item._id} image={item.image} classname={item.name}
+                                   classsection={item.section} classdetails={item.details}
+                        />
+                    ))
+                    }
+                </div>
             </div>
-        </div>
-    )
+        )
+    }
 }
-export default Dashboard;

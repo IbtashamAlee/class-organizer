@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import { Button } from "@material-ui/core";
+import { Button, Radio } from "@material-ui/core";
 import axios from "axios";
 import qs from "querystring";
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
@@ -9,17 +9,28 @@ class SignUp extends React.Component{
     constructor(props) {
         super(props);
         this.login = this.login.bind(this);
+        this.setRadio2 = this.setRadio2.bind(this);
+        this.setRadio1 = this.setRadio1.bind(this);
         this.state = {
             email: '',
             username: '',
             password: '',
             error_text: '',
-            success_text: ''
+            success_text: '',
+            isTutor: false,
         }
     }
 
     changeRoute = () => {
         this.props.history.push('/');
+    }
+
+    setRadio1() {
+        this.setState({isTutor: false});
+    }
+
+    setRadio2() {
+        this.setState({isTutor: true});
     }
 
     login(event) {
@@ -32,7 +43,8 @@ class SignUp extends React.Component{
             data: qs.stringify({
                 email: this.state.email,
                 username: this.state.username,
-                password: this.state.password
+                password: this.state.password,
+                isTutor: this.state.isTutor
             }),
             headers: {
                 'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
@@ -110,6 +122,18 @@ class SignUp extends React.Component{
                                     <p className="text-red-500 mt-2 text-sm">{this.state.error_text}</p>:
                                     <p className="text-green-500 mt-2 text-sm">{this.state.success_text}</p>
                                 }
+
+                                <div>
+                                    <div className="text-gray-900">
+                                        <Radio checked={!this.state.isTutor} onChange={this.setRadio1} color="primary" name="isTutor"/>
+                                        <span>I'm a student</span>
+                                    </div>
+                                    <div className="text-gray-900">
+                                        <Radio checked={this.state.isTutor} onChange={this.setRadio2} color="primary" name="isTutor"/>
+                                        <span>I'm a teacher</span>
+                                    </div>
+                                </div>
+
                                 <div>
                                     <Button variant="contained" color="primary" type="submit"
                                             className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
