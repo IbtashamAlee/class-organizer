@@ -6,11 +6,14 @@ import Api from '../generics-services/api'
 export default class Dashboard extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            classes: []
+        }
     }
 
     getClasses() {
         Api.execute('/classes', 'get').then((res) => {
-            console.log(res);
+            this.setState({classes: res.data})
         }).catch(err => {
             console.log(err);
         })
@@ -24,9 +27,15 @@ export default class Dashboard extends React.Component {
         return(
             <div>
                 <Header/>
-                <MediaCard image="https://www.gstatic.com/classroom/themes/img_code.jpg"
-                           classname="Digital Image Processing" classdetails="FA18-BCS-B"
-                />
+                <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-4 md:max-w-3xl lg:max-w-6xl mx-auto md:mt-28 xl:mt-10">
+                    {this.state.classes.length &&
+                    this.state.classes.map((item) => (
+                        <MediaCard className="mx-auto" key={item._id} image={item.image} classname={item.name}
+                                   classsection={item.section} classdetails={item.details}
+                        />
+                    ))
+                    }
+                </div>
             </div>
         )
     }
