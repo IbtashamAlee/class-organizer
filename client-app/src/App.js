@@ -8,25 +8,23 @@ import SignUp from "./components/signup";
 import FAQ from "./components/faq";
 import Dashboard from "./components/dashboard";
 import {ProtectedRoute} from "./protected-route";
-import auth from "./auth";
+import {EnrouteToDashboard} from "./redirect-to-dashboard";
+import ClassDetails from "./components/class-details";
 
 function App() {
     return (
         <Router>
             <Switch>
                 <Route path="/not-found" component={NotFound}/>
-                <Route exact path="/signin">
-                    {auth.isAuthenticated() ? <Redirect to="/dashboard" /> : <SignIn/>}
-                </Route>
-                <Route exact path="/signup">
-                    {auth.isAuthenticated() ? <Redirect to="/dashboard" /> : <SignUp/>}
-                </Route>
                 <Route path="/faq" component={FAQ}/>
 
+                <EnrouteToDashboard path="/signin" component={SignIn} />
+                <EnrouteToDashboard path="/signin" component={SignUp} />
+
                 <ProtectedRoute exact path="/dashboard" component={Dashboard} />
-                <Route exact path="/">
-                    {auth.isAuthenticated() ? <Redirect to="/dashboard" /> : <Home/>}
-                </Route>
+                <ProtectedRoute exact path="/class/:id" component={ClassDetails} />
+
+                <EnrouteToDashboard path="/" component={Home} />
 
                 <Redirect to="/not-found"/>
             </Switch>
