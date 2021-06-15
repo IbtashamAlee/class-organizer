@@ -1,29 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
+import SwipeableViews from 'react-swipeable-views'
+import { useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import Header from "./layout/header";
+import Announcements from "./announcements";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
     return (
-        <div
+        <Typography
+            component="div"
             role="tabpanel"
             hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
+            id={`action-tabpanel-${index}`}
+            aria-labelledby={`action-tab-${index}`}
             {...other}
         >
-            {value === index && (
-                <Box p={3}>
-                    <Typography>{children}</Typography>
-                </Box>
-            )}
-        </div>
+            {value === index && <Box p={3}>{children}</Box>}
+        </Typography>
     );
 }
 
@@ -35,44 +35,59 @@ TabPanel.propTypes = {
 
 function a11yProps(index) {
     return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
+        id: `action-tab-${index}`,
+        'aria-controls': `action-tabpanel-${index}`,
     };
 }
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-        backgroundColor: "bg-white",
-    },
-}));
-
-export default function SimpleTabs() {
-    const classes = useStyles();
+export default function ClassDetails() {
+    const theme = useTheme();
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
+    const handleChangeIndex = (index) => {
+        setValue(index);
+    };
     return (
-        <div className={classes.root}>
-            <AppBar position="static" color="inherit">
-                <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" centered>
-                    <Tab label="Announcments" {...a11yProps(0)} />
-                    <Tab label="Todos" {...a11yProps(1)} />
-                    <Tab label="Assignments" {...a11yProps(2)} />
-                </Tabs>
-            </AppBar>
-            <TabPanel value={value} index={0}>
-                Item One
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-                Item Two
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-                Item Three
-            </TabPanel>
+        <div>
+            <Header/>
+            <div className={"xl:mt-0 top-12 md:max-w-xs lg:max-w-2xl mx-auto max-w-xs"}>
+                <AppBar position="fixed" color="inherit" style={{top: "69px"}}>
+                    <Tabs
+                        value={value}
+                        onChange={handleChange}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        centered
+                        aria-label="action tabs example"
+                    >
+                        <Tab label="Announcements" {...a11yProps(0)} />
+                        <Tab label="Todos" {...a11yProps(1)} />
+                        <Tab label="Assignments" {...a11yProps(2)} />
+                    </Tabs>
+                </AppBar>
+                <div className="mt-32">
+                    <SwipeableViews
+                        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                        index={value}
+                        onChangeIndex={handleChangeIndex}
+                    >
+                        <TabPanel value={value} index={0} dir={theme.direction}>
+                            <Announcements/>
+                        </TabPanel>
+                        <TabPanel value={value} index={1} dir={theme.direction}>
+                            Item Two
+                        </TabPanel>
+                        <TabPanel value={value} index={2} dir={theme.direction}>
+                            Item Three
+                        </TabPanel>
+                    </SwipeableViews>
+                </div>
+
+            </div>
         </div>
     );
 }
