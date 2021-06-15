@@ -7,6 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
     root: {
@@ -19,9 +20,14 @@ const useStyles = makeStyles({
 
 export default function MediaCard(props) {
     const classes = useStyles();
+    let history = useHistory();
+
+    function pushToCardDetails() {
+        history.push('/class/details');
+    }
 
     return (
-        <Card className={classes.root}>
+        <Card className={classes.root} variant="outlined" onClick={pushToCardDetails}>
             <CardActionArea>
                 <CardMedia
                     className={classes.media}
@@ -41,11 +47,8 @@ export default function MediaCard(props) {
                 </CardContent>
             </CardActionArea>
             <CardActions>
-                <Button size="small" color="primary">
-                    Share
-                </Button>
-                <Button size="small" color="primary">
-                    Learn More
+                <Button size="small" color="primary" onClick={pushToCardDetails}>
+                    Open
                 </Button>
             </CardActions>
         </Card>
