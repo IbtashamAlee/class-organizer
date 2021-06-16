@@ -9,7 +9,7 @@ const ClassSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    annoucements: Array,
+    announcements: Array,
     todos: Array,
     image: String,
     section: String,

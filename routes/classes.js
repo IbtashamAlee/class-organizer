@@ -68,9 +68,9 @@ router.post('/announcement', checkToken, isTutor, async (req, res) => {
         })
 
         await Counter.findOne({_id: req.body.class_id}).then(async result => {
-            _class.annoucements.push({
+            _class.announcements.push({
                 id: result.announcement_counter,
-                announcement: req.body.annoucement
+                announcement: req.body.announcement
             });
             _class.save();
             res.sendStatus(200);
@@ -83,16 +83,26 @@ router.post('/announcement', checkToken, isTutor, async (req, res) => {
 
 })
 
+router.post('/announcements/get', async (req, res) => {
+    let allClasses;
+    await Class.findOne({_id: req.body.classid}).then(async classes => {
+        allClasses = classes;
+        res.send(allClasses.announcements);
+    }).catch(err => {
+        res.sendStatus(404);
+    });
+})
+
 // delete announcement
 router.delete('/announcement',checkToken, isTutor, async (req, res) => {
     await Class.findById(req.body.class_id).then(async _class => {
-        let announcement = _class.annoucements.filter(item => item.id === parseInt(req.body.announcement_id));
+        let announcement = _class.announcements.filter(item => item.id === parseInt(req.body.announcement_id));
         if (announcement.length === 0) {
             res.status(404).send("Unable to find announcement!");
             return;
         }
-        let announcement_index = _class.annoucements.indexOf(announcement[0]);
-        _class.annoucements.splice(announcement_index, 1);
+        let announcement_index = _class.announcements.indexOf(announcement[0]);
+        _class.announcements.splice(announcement_index, 1);
         _class.save();
         res.sendStatus(200);
     }).catch(() => {
@@ -102,17 +112,17 @@ router.delete('/announcement',checkToken, isTutor, async (req, res) => {
 
 router.put('/announcement',checkToken, isTutor, async (req, res) => {
     await Class.findById(req.body.class_id).then(async _class => {
-        let announcement = _class.annoucements.filter(item => item.id === parseInt(req.body.announcement_id));
+        let announcement = _class.announcements.filter(item => item.id === parseInt(req.body.announcement_id));
 
         if (announcement.length === 0) {
             res.status(404).send("Unable to find announcement!");
             return;
         }
 
-        let announcement_index = _class.annoucements.indexOf(announcement[0]);
-        _class.annoucements.splice(announcement_index, 1);
+        let announcement_index = _class.announcements.indexOf(announcement[0]);
+        _class.announcements.splice(announcement_index, 1);
 
-        _class.annoucements.push({id: parseInt(req.body.announcement_id), announcement: req.body.announcement});
+        _class.announcements.push({id: parseInt(req.body.announcement_id), announcement: req.body.announcement});
         _class.save();
         res.sendStatus(200);
     }).catch(() => {
