@@ -46,9 +46,10 @@ router.get('/', checkToken, isTutor, async (req,res) => {
     });
 })
 
-router.get('/byid', checkToken, isTutor, async (req,res) => {
+router.post('/byid', checkToken, isTutor, async (req,res) => {
     let allClasses;
     await Class.findOne({_id: req.body.classid}).then(async classes => {
+        console.log(req.body.classid);
         allClasses = classes;
         res.send(allClasses);
     }).catch(err => {
