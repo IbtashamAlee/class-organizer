@@ -22,7 +22,7 @@ function App() {
                 <EnrouteToDashboard path="/signin" component={SignUp} />
 
                 <ProtectedRoute exact path="/dashboard" component={Dashboard} />
-                <ProtectedRoute exact path="/class/:id" component={ClassDetails} />
+                <ProtectedRoute exact path="/class-details" component={ClassDetails} />
 
                 <EnrouteToDashboard path="/" component={Home} />
 
