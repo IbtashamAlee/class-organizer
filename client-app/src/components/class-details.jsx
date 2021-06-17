@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views'
 import { useTheme } from '@material-ui/core/styles';
@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Header from "./layout/header";
 import Announcements from "./announcements";
+import Api from '../generics-services/api';
+import {useLocation} from "react-router-dom";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -40,9 +42,12 @@ function a11yProps(index) {
     };
 }
 
-export default function ClassDetails() {
+export default function ClassDetails(props) {
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
+    const [classDetail, setClassDetail] = React.useState({});
+    let location = useLocation();
+    let class_id = location.state;
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -51,6 +56,15 @@ export default function ClassDetails() {
     const handleChangeIndex = (index) => {
         setValue(index);
     };
+
+    useEffect(() => {
+        Api.execute('/classes/' + class_id, 'get', ).then((res) => {
+            setClassDetail(res.data);
+        }).catch((err) => {
+            console.log(err);
+        })
+    },[class_id])
+
     return (
         <div>
             <Header/>
@@ -76,7 +90,7 @@ export default function ClassDetails() {
                         onChangeIndex={handleChangeIndex}
                     >
                         <TabPanel value={value} index={0} dir={theme.direction}>
-                            <Announcements/>
+                            <Announcements classid={classDetail._id}/>
                         </TabPanel>
                         <TabPanel value={value} index={1} dir={theme.direction}>
                             Item Two
