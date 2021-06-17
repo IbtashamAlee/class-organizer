@@ -6,8 +6,11 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import Api from "../../generics-services/api";
 
 const useStyles = makeStyles({
     root: {
@@ -20,36 +23,52 @@ const useStyles = makeStyles({
 
 export default function MediaCard(props) {
     const classes = useStyles();
-    let history = useHistory();
+    let class_id = props.classId;
 
-    function pushToCardDetails() {
-        history.push('/class/details');
+    function deleteClass() {
+        Api.execute('/classes', 'delete', {class_id: props.classId}).then((res) => {
+
+        }).catch(err => {
+            console.log(err);
+        })
     }
 
     return (
-        <Card className={classes.root} variant="outlined" onClick={pushToCardDetails}>
-            <CardActionArea>
-                <CardMedia
-                    className={classes.media}
-                    image={props.image}
-                    title={props.title}
-                />
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
-                        {props.classname}
-                    </Typography>
-                    <Typography variant="body1" color="textSecondary" component="p">
-                        {props.classsection}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
-                        {props.classdetails}
-                    </Typography>
-                </CardContent>
-            </CardActionArea>
-            <CardActions>
-                <Button size="small" color="primary" onClick={pushToCardDetails}>
+        <Card className={classes.root} variant="outlined">
+            <Link to={
+                {
+                    pathname: '/class-details',
+                    state: class_id
+                }
+            }>
+                <CardActionArea>
+                    <CardMedia
+                        className={classes.media}
+                        image={props.image}
+                        title={props.title}
+                    />
+                    <CardContent>
+                        <Typography gutterBottom variant="h5" component="h2">
+                            {props.classname}
+                        </Typography>
+                        <Typography variant="body1" color="textSecondary" component="p">
+                            {props.classsection}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary" component="p">
+                            {props.classdetails}
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
+            </Link>
+            <CardActions className="flex justify-between">
+                <Button size="small" color="primary">
                     Open
                 </Button>
+                <div className="text-red-500">
+                    <IconButton size="small" color="inherit" onClick={deleteClass}>
+                        <DeleteOutlineIcon/>
+                    </IconButton>
+                </div>
             </CardActions>
         </Card>
     );
