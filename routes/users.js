@@ -68,7 +68,7 @@ router.post("/signin", async (req, res) => {
                             jsonwt.sign(
                                 payload,
                                 process.env.MY_SECRET_KEY,
-                                {expiresIn: 3600},
+                                {expiresIn: 36000},
                                 (err, token) => {
                                     if (err) {
                                         console.log("Error is ", err.message);
