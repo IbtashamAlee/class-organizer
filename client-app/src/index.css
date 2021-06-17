@@ -6,11 +6,15 @@
     text-transform: none!important;
 }
 
-.PrivateTabIndicator-colorSecondary-4 {
+.MuiTabs-indicator {
     --tw-bg-opacity: 1;
     background-color: rgba(99, 102, 241, var(--tw-bg-opacity))!important;
 }
 
 button:focus {
     outline: none!important;
+}
+
+.MuiPaper-elevation4 {
+    box-shadow: none !important;
 }
