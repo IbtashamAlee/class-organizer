@@ -9,12 +9,12 @@ const authAxios = axios.create({
 })
 
 class Api {
-    execute(url,method, data={}) {
+    execute(url,method, dataobject={}) {
         return new Promise(function (resolve, reject) {
             authAxios({
                 method: method,
                 url: url,
-                data: qs.stringify(data),
+                data: qs.stringify(dataobject),
                 headers: {
                     'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
                 }
