@@ -83,6 +83,18 @@ router.post('/announcement', checkToken, isTutor, async (req, res) => {
 
 })
 
+
+//get Announcements
+router.get('/announcement/:classid', checkToken, async (req, res) => {
+    let allClasses;
+    await Class.findOne({_id: req.params.classid}).then(async classes => {
+        allClasses = classes;
+        res.send(allClasses.announcements);
+    }).catch(err => {
+        res.sendStatus(404);
+    });
+})
+
 // delete announcement
 router.delete('/announcement',checkToken, isTutor, async (req, res) => {
     await Class.findById(req.body.class_id).then(async _class => {
