@@ -46,9 +46,9 @@ router.get('/', checkToken, isTutor, async (req,res) => {
     });
 })
 
-router.post('/byid', checkToken, isTutor, async (req,res) => {
+router.get('/:id', checkToken, isTutor, async (req,res) => {
     let allClasses;
-    await Class.findOne({_id: req.body.classid}).then(async classes => {
+    await Class.findOne({_id: req.params.id}).then(async classes => {
         allClasses = classes;
         res.send(allClasses);
     }).catch(err => {
@@ -81,16 +81,6 @@ router.post('/announcement', checkToken, isTutor, async (req, res) => {
         res.status(404).send("Class not found!");
     })
 
-})
-
-router.post('/announcements/get', async (req, res) => {
-    let allClasses;
-    await Class.findOne({_id: req.body.classid}).then(async classes => {
-        allClasses = classes;
-        res.send(allClasses.announcements);
-    }).catch(err => {
-        res.sendStatus(404);
-    });
 })
 
 // delete announcement
