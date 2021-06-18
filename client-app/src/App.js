@@ -19,7 +19,7 @@ function App() {
                 <Route path="/faq" component={FAQ}/>
 
                 <EnrouteToDashboard path="/signin" component={SignIn} />
-                <EnrouteToDashboard path="/signin" component={SignUp} />
+                <EnrouteToDashboard path="/signup" component={SignUp} />
 
                 <ProtectedRoute exact path="/dashboard" component={Dashboard} />
                 <ProtectedRoute exact path="/class-details" component={ClassDetails} />
