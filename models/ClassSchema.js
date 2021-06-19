@@ -9,8 +9,18 @@ const ClassSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    announcements: Array,
-    todos: Array,
+    announcements: [
+        {
+            id: Number,
+            announcement: String
+        }
+    ],
+    todos: [
+        {
+            id: Number,
+            todo: String
+        }
+    ],
     image: String,
     section: String,
     details: String,
