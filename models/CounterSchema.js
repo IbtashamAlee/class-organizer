@@ -9,6 +9,10 @@ const CounterSchema = mongoose.Schema({
     todo_counter: {
         type: Number,
         default: 0
+    },
+    assignment_counter: {
+        type: Number,
+        default: 0
     }
 });
 

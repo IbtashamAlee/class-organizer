@@ -24,9 +24,14 @@ const ClassSchema = mongoose.Schema({
     image: String,
     section: String,
     details: String,
-    assignments: {
-        type: Array
-    }
+    assignments: [
+        {
+            id: Number,
+            assignment: Buffer,
+            filename: String,
+            mimetype: String
+        }
+    ]
 })
 
 module.exports = Class = mongoose.model('classschema', ClassSchema);

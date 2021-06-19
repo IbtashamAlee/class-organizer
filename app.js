@@ -22,6 +22,7 @@ var usersRouter = require('./routes/users');
 var classesRouter = require('./routes/classes');
 var todosRouter = require('./routes/todos');
 var announcementsRouter = require('./routes/announcements');
+var assignmentsRouter = require('./routes/assignments')
 
 var app = express();
 
@@ -48,6 +49,7 @@ app.use('/users', usersRouter);
 app.use('/classes', classesRouter);
 app.use('/classes', todosRouter);
 app.use('/classes', announcementsRouter);
+app.use('/classes', assignmentsRouter);
 app.use((req, res, next) => {
     res.sendFile(path.join(__dirname, ".", "client-app/build", "index.html"));
 });
