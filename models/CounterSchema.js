@@ -5,19 +5,15 @@ const CounterSchema = mongoose.Schema({
     announcement_counter: {
         type: Number,
         default: 0
+    },
+    todo_counter: {
+        type: Number,
+        default: 0
+    },
+    assignment_counter: {
+        type: Number,
+        default: 0
     }
 });
 
 module.exports = Counter = mongoose.model('counterschema', CounterSchema);
-
-Counter.find().then((res) => {
-    if (res.length === 0) {
-        new Counter({
-            _id: "None"
-        }).save().then((res) => {
-            console.log(res);
-        }).catch((err) => {
-            console.log(err);
-        });
-    }
-})

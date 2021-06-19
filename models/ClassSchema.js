@@ -9,14 +9,29 @@ const ClassSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    announcements: Array,
-    todos: Array,
+    announcements: [
+        {
+            id: Number,
+            announcement: String
+        }
+    ],
+    todos: [
+        {
+            id: Number,
+            todo: String
+        }
+    ],
     image: String,
     section: String,
     details: String,
-    assignments: {
-        type: Array
-    }
+    assignments: [
+        {
+            id: Number,
+            assignment: Buffer,
+            filename: String,
+            mimetype: String
+        }
+    ]
 })
 
 module.exports = Class = mongoose.model('classschema', ClassSchema);

@@ -2,8 +2,11 @@ import React from "react";
 import Header from "./layout/header";
 import Card from "./layout/card";
 import Api from '../generics-services/api'
+import {setProducts} from '../redux/actions/productsActions'
+import { connect } from 'react-redux'
 
-export default class Dashboard extends React.Component {
+
+class Dashboard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -14,6 +17,7 @@ export default class Dashboard extends React.Component {
     getClasses() {
         Api.execute('/classes', 'get').then((res) => {
             this.setState({classes: res.data})
+            this.props.setProducts(res.data);
         }).catch(err => {
             console.log(err);
         })
@@ -31,8 +35,8 @@ export default class Dashboard extends React.Component {
                     <p>All Classes</p>
                 </div>
                 <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-4 md:max-w-3xl lg:max-w-6xl mx-auto max-w-xs md:mt-8 xl:mt-10">
-                    {this.state.classes.length ?
-                    this.state.classes.map((item) => (
+                    {this.props.classes.length ?
+                    this.props.classes.map((item) => (
                         <Card classId={item._id} className="mx-auto" key={item._id} image={item.image} classname={item.name}
                                    classsection={item.section} classdetails={item.details}
                         />
@@ -43,3 +47,8 @@ export default class Dashboard extends React.Component {
         )
     }
 }
+const mapStateToProps = (state) => {
+    let classes = state.user.classes
+    return {classes};
+}
+export default connect(mapStateToProps, { setProducts })(Dashboard)
