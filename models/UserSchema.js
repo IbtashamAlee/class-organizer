@@ -13,6 +13,10 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    avatar: {
+        type: String || Buffer,
+        default: 'https://tuk-cdn.s3.amazonaws.com/assets/components/horizontal_navigation/hn_2.png'
+    },
     fullname: {
         type: String,
         required: true
