@@ -20,7 +20,6 @@ class Dashboard extends React.Component {
 
     getUserProfile() {
         Api.execute('/users/me/profile', 'get').then((res) => {
-            console.log(res);
             this.props.setProfile(res.data);
             this.props.history.push('/dashboard');
         }).catch((err) => {

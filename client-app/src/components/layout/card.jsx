@@ -11,6 +11,8 @@ import Typography from '@material-ui/core/Typography';
 import { Link } from "react-router-dom";
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import Api from "../../generics-services/api";
+import { useDispatch } from "react-redux";
+import { setClasses } from '../../redux/actions/classesActions'
 
 const useStyles = makeStyles({
     root: {
@@ -24,10 +26,19 @@ const useStyles = makeStyles({
 export default function MediaCard(props) {
     const classes = useStyles();
     let class_id = props.classId;
+    let dispatch = useDispatch();
+
+    function getClasses() {
+        Api.execute('/classes', 'get').then((res) => {
+            dispatch(setClasses(res.data));
+        }).catch(err => {
+            console.log(err);
+        })
+    }
 
     function deleteClass() {
         Api.execute('/classes', 'delete', {class_id: props.classId}).then((res) => {
-
+            getClasses();
         }).catch(err => {
             console.log(err);
         })
