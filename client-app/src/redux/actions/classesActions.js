@@ -1,9 +1,9 @@
 import { ActionTypes } from "../constants/actionTypes";
 
-export const setProducts = (products) => {
+export const setClasses = (classes) => {
     return {
-        type: ActionTypes.SET_PRODUCTS,
-        payload: products,
+        type: ActionTypes.SET_CLASS,
+        payload: classes,
     };
 };
 
