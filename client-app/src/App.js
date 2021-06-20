@@ -10,6 +10,7 @@ import Dashboard from "./components/dashboard";
 import {ProtectedRoute} from "./protected-route";
 import {EnrouteToDashboard} from "./redirect-to-dashboard";
 import ClassDetails from "./components/class-details";
+import Profile from "./components/profile";
 
 function App() {
     return (
@@ -23,6 +24,7 @@ function App() {
 
                 <ProtectedRoute exact path="/dashboard" component={Dashboard} />
                 <ProtectedRoute exact path="/class-details" component={ClassDetails} />
+                <ProtectedRoute exact path="/profile" component={Profile}/>
 
                 <EnrouteToDashboard path="/" component={Home} />
 
