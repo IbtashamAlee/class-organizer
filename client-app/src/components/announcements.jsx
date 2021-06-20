@@ -112,7 +112,7 @@ export default class Announcements extends React.Component {
                                                 {item.announcement}
                                             </p>
                                         </div>
-                                        <div>
+                                        <div className="flex">
                                             <div className="text-green-500 inline-block">
                                                 <Button size="small" color="inherit" className="text-white" value={item.id} onClick={this.updateAnnouncement}>
                                                     <EditOutlinedIcon style={{color: 'inherit'}}/>
