@@ -13,7 +13,7 @@ class SignUp extends React.Component{
         this.setRadio1 = this.setRadio1.bind(this);
         this.state = {
             email: '',
-            username: '',
+            fullname: '',
             password: '',
             error_text: '',
             success_text: '',
@@ -42,7 +42,7 @@ class SignUp extends React.Component{
             url: '/users/signup',
             data: qs.stringify({
                 email: this.state.email,
-                username: this.state.username,
+                fullname: this.state.fullname,
                 password: this.state.password,
                 isTutor: this.state.isTutor
             }),
@@ -50,7 +50,7 @@ class SignUp extends React.Component{
                 'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
             }}).then((res) => {
                 this.setState({email: ""});
-                this.setState({username: ""});
+                this.setState({fullname: ""});
                 this.setState({password: ""})
                 this.setState({success_text: "Account created successfully. Please login to continue."})
         }).catch((err) => {
@@ -92,13 +92,13 @@ class SignUp extends React.Component{
                                     errorMessages={['This field is required', 'Email is not valid']}
                                 />
                                 <TextValidator
-                                    value={this.state.username}
-                                    onChange={event => this.setState({username: event.target.value})}
+                                    value={this.state.fullname}
+                                    onChange={event => this.setState({fullname: event.target.value})}
                                     className="block w-full"
-                                    id="username"
-                                    label="Username"
-                                    type="username"
-                                    autoComplete="current-username"
+                                    id="fullname"
+                                    label="Full name"
+                                    type="fullname"
+                                    autoComplete="current-fullname"
                                     variant="outlined"
                                     validators={['required']}
                                     errorMessages={['This field is required']}
