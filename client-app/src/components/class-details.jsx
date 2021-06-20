@@ -11,6 +11,7 @@ import Header from "./layout/header";
 import Announcements from "./announcements";
 import Api from '../generics-services/api';
 import {useLocation} from "react-router-dom";
+import Todos from "./todos";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -93,7 +94,7 @@ export default function ClassDetails(props) {
                             <Announcements classid={classDetail._id}/>
                         </TabPanel>
                         <TabPanel value={value} index={1} dir={theme.direction}>
-                            Item Two
+                            <Todos classid={classDetail._id}/>
                         </TabPanel>
                         <TabPanel value={value} index={2} dir={theme.direction}>
                             Item Three
