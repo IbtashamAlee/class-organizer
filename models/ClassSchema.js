@@ -21,7 +21,10 @@ const ClassSchema = mongoose.Schema({
             todo: String
         }
     ],
-    image: String,
+    image: {
+        type: String,
+        default: "https://www.gstatic.com/classroom/themes/img_code.jpg"
+    },
     section: String,
     details: String,
     assignments: [

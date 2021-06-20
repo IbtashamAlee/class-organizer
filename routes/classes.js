@@ -34,8 +34,19 @@ router.delete('/', checkToken, isTutor, async (req, res) => {
 
 // get classes
 router.get('/', checkToken, isTutor, async (req,res) => {
+    let allClasses = [];
     await Class.find({userid: getId(req.token)}).then(async classes => {
-        res.send(classes);
+        for (let i = 0; i < classes.length; i++) {
+            allClasses.push({
+                "_id": classes[i]._id,
+                "name": classes[i].name,
+                "userid": classes[i].userid,
+                "section": classes[i].section,
+                "details": classes[i].details,
+                "image": classes[i].image
+            })
+        }
+        res.send(allClasses);
     }).catch(err => {
         res.sendStatus(404);
     });
