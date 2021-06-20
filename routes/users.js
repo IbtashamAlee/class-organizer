@@ -3,7 +3,9 @@ let router = express.Router();
 var passport = require("passport");
 let User = require('../models/UserSchema')
 const jsonwt = require("jsonwebtoken");
-var bcrypt = require('bcrypt')
+var bcrypt = require('bcrypt');
+var checkToken = require('../middlewares/token-checker')
+var getId = require('../validation-functions/get-id')
 
 router.post("/signup", async (req, res) => {
     let tutor = false;
@@ -13,7 +15,8 @@ router.post("/signup", async (req, res) => {
     var newUser = new User({
         email: req.body.email,
         password: req.body.password,
-        isTutor: tutor
+        isTutor: tutor,
+        fullname: req.body.fullname
     });
 
     await User.findOne({email: newUser.email})
@@ -25,10 +28,11 @@ router.post("/signup", async (req, res) => {
                         console.log("Error is", err.message);
                     } else {
                         newUser.password = hash;
+                        console.log("hashed : ", hash);
                         await newUser
                             .save()
                             .then(() => {
-                                res.status(200);
+                                res.sendStatus(200);
                             })
                             .catch(err => {
                                 console.log("Error is ", err.message);
@@ -137,4 +141,20 @@ router.get(
         });
     }
 );
+
+
+router.get("/me/profile", checkToken, async (req, res) => {
+    User.findById((getId(req.token))).then(user => {
+        user = {
+            "_id": user._id,
+            "email": user.email,
+            "isTutor": user.isTutor,
+            "fullname": user.fullname,
+        }
+        res.send(user);
+    }).catch(err => {
+        res.sendStatus(404)
+    })
+});
+
 module.exports = router;

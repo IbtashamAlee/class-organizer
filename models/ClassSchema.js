@@ -22,7 +22,7 @@ const ClassSchema = mongoose.Schema({
         }
     ],
     image: {
-        type: String,
+        type: String || Buffer,
         default: "https://www.gstatic.com/classroom/themes/img_code.jpg"
     },
     section: String,
