@@ -1,15 +1,15 @@
 import React from "react";
 import Announcement from '@material-ui/icons/Announcement';
-import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import Button from "@material-ui/core/Button";
 import DeleteIcon from '@material-ui/icons/Delete';
 import Api from '../generics-services/api';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
+import IconButton from "@material-ui/core/IconButton";
+import EditDetail from "./edit-announcement-todo";
 
 export default class Announcements extends React.Component {
     constructor(props) {
         super(props);
-        this.updateAnnouncement = this.updateAnnouncement.bind(this);
         this.getAnnouncements = this.getAnnouncements.bind(this);
         this.deleteAnnouncement = this.deleteAnnouncement.bind(this);
         this.postAnnouncement = this.postAnnouncement.bind(this);
@@ -28,7 +28,7 @@ export default class Announcements extends React.Component {
     }
 
     getAnnouncements() {
-        Api.execute('/classes/announcement/' + this.props.classid, 'get').then((res) => {
+        Api.execute('/classes/announcements/' + this.props.classid, 'get').then((res) => {
             this.setState({announcements: res.data})
         }).catch((err) => {
             console.log(err);
@@ -54,19 +54,6 @@ export default class Announcements extends React.Component {
             announcement_id: e.currentTarget.value
         }).then(() => {
             this.getAnnouncements()
-        }).catch((err) => {
-            console.log(err);
-        })
-    }
-
-    updateAnnouncement(e) {
-        e.preventDefault();
-        Api.execute('/classes/announcement', 'put', {
-            class_id: this.props.classid,
-            announcement_id: e.currentTarget.value,
-            announcement: this.state.updateAnnouncement
-        }).then((res) => {
-            this.getAnnouncements();
         }).catch((err) => {
             console.log(err);
         })
@@ -106,22 +93,20 @@ export default class Announcements extends React.Component {
                             this.state.announcements.map((item) => (
                                 <li className="py-5" key={item.id}>
                                     <div className="relative flex justify-between items-center focus-within:ring-2 focus-within:ring-indigo-500">
-                                        <div className="flex items-center">
-                                            <Announcement color="action" fontSize="large" className="mr-4"/>
+                                        <div className="flex items-center justify-center">
+                                            <Announcement color="action" fontSize="large" className="mr-4 p-1 mt-1"/>
                                             <p className=" text-base text-gray-600 line-clamp-2">
                                                 {item.announcement}
                                             </p>
                                         </div>
-                                        <div className="flex">
+                                        <div className="flex space-x-3">
                                             <div className="text-green-500 inline-block">
-                                                <Button size="small" color="inherit" className="text-white" value={item.id} onClick={this.updateAnnouncement}>
-                                                    <EditOutlinedIcon style={{color: 'inherit'}}/>
-                                                </Button>
+                                                <EditDetail type="announcement" id={item.id} classId={this.props.classid}/>
                                             </div>
                                             <div className="text-red-500 inline-block">
-                                                <Button size="small" color="inherit" className="text-white" value={item.id} onClick={this.deleteAnnouncement}>
+                                                <IconButton size="small" color="inherit" className="text-white" value={item.id} onClick={this.deleteAnnouncement}>
                                                     <DeleteIcon style={{color: 'inherit'}}/>
-                                                </Button>
+                                                </IconButton>
                                             </div>
                                         </div>
                                     </div>

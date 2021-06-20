@@ -8,7 +8,7 @@ const isTutor = require('../middlewares/is-tutor');
 
 
 //get Announcements
-router.get('/announcement/:classid', checkToken, async (req, res) => {
+router.get('/announcements/:classid', checkToken, async (req, res) => {
     let announcements;
     await Class.findOne({_id: req.params.classid}).then(async classes => {
         announcements = classes.announcements;

@@ -56,12 +56,14 @@ export default function AddClassDialog() {
             <Button className="text-gray-600" color="inherit" title="Add class" onClick={handleClickOpen}>
                 <AddOutlinedIcon/>
             </Button>
-            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title"
+                    maxWidth={'xs'}
+                    fullWidth={true}
+            >
+                <DialogTitle id="form-dialog-title">Add Class</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        To subscribe to this website, please enter your email address here. We will send updates
-                        occasionally.
+                        Fill the detail and to add the class
                     </DialogContentText>
                     <ValidatorForm onSubmit={addClass} className="space-y-2">
                         <TextValidator
