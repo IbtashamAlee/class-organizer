@@ -48,7 +48,7 @@ export default function MediaCard(props) {
         <Card className={classes.root} variant="outlined">
             <Link to={
                 {
-                    pathname: '/class-details',
+                    pathname: `/class-details/${class_id}`,
                     state: class_id
                 }
             }>

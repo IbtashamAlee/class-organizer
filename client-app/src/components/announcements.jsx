@@ -6,8 +6,10 @@ import Api from '../generics-services/api';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 import IconButton from "@material-ui/core/IconButton";
 import EditDetail from "./edit-announcement-todo";
+import {connect} from "react-redux";
+import {setAnnouncements} from "../redux/actions/announcementsAction";
 
-export default class Announcements extends React.Component {
+class Announcements extends React.Component {
     constructor(props) {
         super(props);
         this.getAnnouncements = this.getAnnouncements.bind(this);
@@ -16,9 +18,12 @@ export default class Announcements extends React.Component {
 
         this.state = {
             announcements: '',
-            updateAnnouncement: '',
             addAnnouncement: '',
         }
+    }
+
+    componentWillUnmount() {
+        this.props.setAnnouncements([]);
     }
 
     componentDidMount() {
@@ -29,7 +34,7 @@ export default class Announcements extends React.Component {
 
     getAnnouncements() {
         Api.execute('/classes/announcements/' + this.props.classid, 'get').then((res) => {
-            this.setState({announcements: res.data})
+            this.props.setAnnouncements(res.data)
         }).catch((err) => {
             console.log(err);
         })
@@ -89,8 +94,8 @@ export default class Announcements extends React.Component {
                 </ValidatorForm>
                 <div className="flow-root mt-6">
                     <ul className="-my-5 divide-y divide-gray-200">
-                        {this.state.announcements &&
-                            this.state.announcements.map((item) => (
+                        {this.props.announcements &&
+                            this.props.announcements.map((item) => (
                                 <li className="py-5" key={item.id}>
                                     <div className="relative flex justify-between items-center focus-within:ring-2 focus-within:ring-indigo-500">
                                         <div className="flex items-center justify-center">
@@ -121,3 +126,11 @@ export default class Announcements extends React.Component {
         )
     }
 }
+
+
+const mapStateToProps = (state) => {
+    let announcements = state.announcements.announcements
+    return {announcements};
+}
+
+export default connect(mapStateToProps, { setAnnouncements })(Announcements)

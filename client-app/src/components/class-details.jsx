@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views'
 import { useTheme } from '@material-ui/core/styles';
@@ -9,8 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Header from "./layout/header";
 import Announcements from "./announcements";
-import Api from '../generics-services/api';
-import {useLocation} from "react-router-dom";
+import { useParams} from "react-router-dom";
 import Todos from "./todos";
 
 function TabPanel(props) {
@@ -46,9 +45,7 @@ function a11yProps(index) {
 export default function ClassDetails(props) {
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
-    const [classDetail, setClassDetail] = React.useState({});
-    let location = useLocation();
-    let class_id = location.state;
+    let {id} = useParams();
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -57,14 +54,6 @@ export default function ClassDetails(props) {
     const handleChangeIndex = (index) => {
         setValue(index);
     };
-
-    useEffect(() => {
-        Api.execute('/classes/' + class_id, 'get', ).then((res) => {
-            setClassDetail(res.data);
-        }).catch((err) => {
-            console.log(err);
-        })
-    },[class_id])
 
     return (
         <div>
@@ -91,10 +80,10 @@ export default function ClassDetails(props) {
                         onChangeIndex={handleChangeIndex}
                     >
                         <TabPanel value={value} index={0} dir={theme.direction}>
-                            <Announcements classid={classDetail._id}/>
+                            <Announcements classid={id}/>
                         </TabPanel>
                         <TabPanel value={value} index={1} dir={theme.direction}>
-                            <Todos classid={classDetail._id}/>
+                            <Todos classid={id}/>
                         </TabPanel>
                         <TabPanel value={value} index={2} dir={theme.direction}>
                             Item Three

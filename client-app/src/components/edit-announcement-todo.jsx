@@ -8,16 +8,21 @@ import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import IconButton from "@material-ui/core/IconButton";
 import Api from "../generics-services/api";
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
+import {useDispatch} from "react-redux";
+import {setAnnouncements} from "../redux/actions/announcementsAction";
+import {setTodos} from "../redux/actions/todosAction";
 
 export default function EditDetail(props) {
     const [open, setOpen] = React.useState(false);
     const [newDetail, setNewDetail] = React.useState('');
+    let dispatch = useDispatch();
 
     const handleClickOpen = () => {
         setOpen(true);
     };
 
     const handleClose = () => {
+        setNewDetail('');
         setOpen(false);
     };
 
@@ -38,6 +43,20 @@ export default function EditDetail(props) {
         }
         Api.execute('/classes/' + props.type, 'put', detail).then((res) => {
             handleClose();
+            console.log('Hi')
+            getAnnouncementsOrTodos();
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
+
+    function getAnnouncementsOrTodos() {
+        Api.execute('/classes/' + props.type + 's/' + props.classId, 'get').then((res) => {
+            if (props.type === 'announcement') {
+                dispatch(setAnnouncements(res.data));
+            } else {
+                dispatch(setTodos(res.data));
+            }
         }).catch((err) => {
             console.log(err);
         })

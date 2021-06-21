@@ -6,8 +6,10 @@ import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 import IconButton from "@material-ui/core/IconButton";
 import LabelImportantIcon from '@material-ui/icons/LabelImportant';
 import EditDetail from "./edit-announcement-todo";
+import {setTodos} from "../redux/actions/todosAction";
+import {connect} from "react-redux";
 
-export default class Todos extends React.Component {
+class Todos extends React.Component {
     constructor(props) {
         super(props);
         this.gettodos = this.gettodos.bind(this);
@@ -27,9 +29,13 @@ export default class Todos extends React.Component {
         },300)
     }
 
+    componentWillUnmount() {
+        this.props.setTodos([]);
+    }
+
     gettodos() {
         Api.execute('/classes/todos/' + this.props.classid, 'get').then((res) => {
-            this.setState({todos: res.data})
+            this.props.setTodos(res.data);
         }).catch((err) => {
             console.log(err);
         })
@@ -89,8 +95,8 @@ export default class Todos extends React.Component {
                 </ValidatorForm>
                 <div className="flow-root mt-6">
                     <ul className="-my-5 divide-y divide-gray-200">
-                        {this.state.todos &&
-                        this.state.todos.map((item) => (
+                        {this.props.todos &&
+                        this.props.todos.map((item) => (
                             <li className="py-5" key={item.id}>
                                 <div className="relative flex justify-between items-center focus-within:ring-2 focus-within:ring-indigo-500">
                                     <div className="flex items-center">
@@ -121,3 +127,11 @@ export default class Todos extends React.Component {
         )
     }
 }
+
+
+const mapStateToProps = (state) => {
+    let todos = state.todos.todos
+    return {todos};
+}
+
+export default connect(mapStateToProps, { setTodos })(Todos)
