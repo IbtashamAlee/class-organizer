@@ -17,10 +17,9 @@ const avatar = multer({
     }
 })
 
-
-router.post('/assignment',checkToken, isTutor, avatar.single('avatar'),async (req,res) =>{
+router.post('/assignment',checkToken, isTutor, avatar.single('file'),async (req,res) =>{
     let _class;
-
+    console.log(req.file)
     await Class.findOne({_id: req.body.class_id }).then(async (result) => {
         _class = result;
         console.log(_class);
@@ -44,18 +43,43 @@ router.post('/assignment',checkToken, isTutor, avatar.single('avatar'),async (re
     }).catch(err => {
         res.status(404).send("Class not found!");
     })
+},(err,req,res,next) => res.status(404).send({error:err}))
 
-})
+/*router.post('/assignment/:class_id',checkToken, isTutor, avatar.single('avatar'),async (req,res) =>{
+    let _class;
+    console.log(req.file)
+    await Class.findOne({_id: req.params.class_id }).then(async (result) => {
+        _class = result;
+        console.log(_class);
+        await Counter.findByIdAndUpdate({_id: req.params.class_id}, {$inc: { assignment_counter: 1} }, {new: true, upsert: true}).then(function(count) {
+        }).catch(err =>{
+            console.log(err);
+        })
+
+        await Counter.findOne({_id: req.params.class_id}).then(async result => {
+            _class.assignments.push({
+                id: result.assignment_counter,
+                assignment: req.file.buffer,
+                filename: req.file.originalname,
+                mimetype: req.file.mimetype
+            });
+            _class.save();
+            res.sendStatus(200);
+        }).catch(err => {
+            console.log(err);
+        });
+    }).catch(err => {
+        res.status(404).send("Class not found!");
+    })
+
+})*/
 
 router.get('/assignment/:classid', async (req, res) => {
     let assignments;
     await Class.findOne({_id: req.params.classid}).then(async classes => {
         assignments = classes.assignments;
-        assignments.sort(function(a, b) {
-            return b.id - a.id  ||  a.assignment.localeCompare(b.assignment);
-        });
-        res.set('Content-Type','multipart/form-data')
-        res.send(assignments);
+        res.set('Content-Type',assignments[3].mimetype)
+        res.send(assignments[3].assignment);
     }).catch(err => {
         res.sendStatus(404);
     });
