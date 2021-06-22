@@ -5,7 +5,8 @@ let User = require('../models/UserSchema')
 const jsonwt = require("jsonwebtoken");
 var bcrypt = require('bcrypt');
 var checkToken = require('../middlewares/token-checker')
-var getId = require('../validation-functions/get-id')
+var getId = require('../validation-functions/get-id');
+var Class = require('../models/ClassSchema')
 
 router.post("/signup", async (req, res) => {
     let tutor = false;
@@ -156,5 +157,21 @@ router.get("/me/profile", checkToken, async (req, res) => {
         res.sendStatus(404)
     })
 });
+
+router.post('/classes', checkToken, async (req,res) => {
+    let userid = getId(req.token);
+    User.findById(userid).then(user => {
+        console.log(user)
+        user.classes.push(req.body.class_id);
+        user.save().then(() => {
+            res.sendStatus(200)
+        }).catch((err) => {
+            console.log(err);
+            res.sendStatus(409);
+        });
+    }).catch(err => {
+        res.sendStatus(404);
+    })
+})
 
 module.exports = router;

@@ -23,6 +23,9 @@ const userSchema = mongoose.Schema({
     },
     contact: String,
     websiteUrl: String,
+    classes: {
+        type: Array
+    }
 })
 
 module.exports = User = mongoose.model('userschema', userSchema);
