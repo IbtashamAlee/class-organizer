@@ -70,7 +70,7 @@ export default function ClassDetails(props) {
                     >
                         <Tab label="Announcements" {...a11yProps(0)} />
                         <Tab label="Todos" {...a11yProps(1)} />
-                        <Tab label="Assignments" {...a11yProps(2)} />
+                        <Tab label="Resources" {...a11yProps(2)} />
                     </Tabs>
                 </AppBar>
                 <div className="mt-32">
