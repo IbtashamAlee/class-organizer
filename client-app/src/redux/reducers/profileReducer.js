@@ -1,12 +1,9 @@
 import { ActionTypes } from "../constants/actionTypes";
-const initialState = {
-    profile: {},
-};
 
-export const setProfileReducer = (state = initialState, { type, payload }) => {
+export const setProfileReducer = (state = {}, { type, payload }) => {
     switch (type) {
         case ActionTypes.SET_PROFILE:
-            return { ...state, profile: payload };
+            return { ...state, ...payload };
         default:
             return state;
     }

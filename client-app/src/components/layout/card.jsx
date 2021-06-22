@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import { Link } from "react-router-dom";
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import Api from "../../generics-services/api";
-import { useDispatch } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import { setClasses } from '../../redux/actions/classesActions'
 
 const useStyles = makeStyles({
@@ -24,6 +24,7 @@ const useStyles = makeStyles({
 });
 
 export default function MediaCard(props) {
+    let isTutor = useSelector((state => state.profile.isTutor));
     const classes = useStyles();
     let class_id = props.classId;
     let dispatch = useDispatch();
@@ -75,11 +76,13 @@ export default function MediaCard(props) {
                 <Button size="small" color="primary">
                     Open
                 </Button>
-                <div className="text-red-500">
-                    <IconButton size="small" color="inherit" onClick={deleteClass}>
-                        <DeleteOutlineIcon/>
-                    </IconButton>
-                </div>
+                {isTutor &&
+                    <div className="text-red-500">
+                        <IconButton size="small" color="inherit" onClick={deleteClass}>
+                            <DeleteOutlineIcon/>
+                        </IconButton>
+                    </div>
+                }
             </CardActions>
         </Card>
     );

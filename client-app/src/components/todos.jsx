@@ -68,32 +68,34 @@ class Todos extends React.Component {
     render () {
         return(
             <div>
-                <ValidatorForm
-                    onSubmit={this.posttodo}
-                    onError={errors => console.log(errors)}
-                    className="flex justify-center items-center w-full"
-                >
-                    <div className="block w-full">
-                        <TextValidator
-                            className="block w-full"
-                            id="todo"
-                            label="Add Todo"
-                            onChange={event => this.setState({addtodo: event.target.value})}
-                            name="Add-todo"
-                            variant="outlined"
-                            value={this.state.addtodo}
-                            validators={['required']}
-                            errorMessages={['This field is required']}
-                        />
-                    </div>
-                    <div className="ml-3">
-                        <Button variant="contained" color="primary" type="submit" size="medium"
-                                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Post
-                        </Button>
-                    </div>
-                </ValidatorForm>
-                <div className="flow-root mt-6">
+                {this.props.isTutor &&
+                    <ValidatorForm
+                        onSubmit={this.posttodo}
+                        onError={errors => console.log(errors)}
+                        className="flex justify-center items-center w-full mb-5"
+                    >
+                        <div className="block w-full">
+                            <TextValidator
+                                className="block w-full"
+                                id="todo"
+                                label="Add Todo"
+                                onChange={event => this.setState({addtodo: event.target.value})}
+                                name="Add-todo"
+                                variant="outlined"
+                                value={this.state.addtodo}
+                                validators={['required']}
+                                errorMessages={['This field is required']}
+                            />
+                        </div>
+                        <div className="ml-3">
+                            <Button variant="contained" color="primary" type="submit" size="medium"
+                                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                Post
+                            </Button>
+                        </div>
+                    </ValidatorForm>
+                }
+                    <div className="flow-root">
                     <ul className="-my-5 divide-y divide-gray-200">
                         {this.props.todos &&
                         this.props.todos.map((item) => (
@@ -105,6 +107,7 @@ class Todos extends React.Component {
                                             {item.todo}
                                         </p>
                                     </div>
+                                    {this.props.isTutor &&
                                     <div className="flex space-x-3">
                                         <div className="text-green-500 inline-block">
                                             <EditDetail type="todo" id={item.id} classId={this.props.classid}/>
@@ -115,6 +118,7 @@ class Todos extends React.Component {
                                             </IconButton>
                                         </div>
                                     </div>
+                                    }
                                 </div>
                             </li>
                         ))
@@ -130,8 +134,9 @@ class Todos extends React.Component {
 
 
 const mapStateToProps = (state) => {
-    let todos = state.todos.todos
-    return {todos};
+    let todos = state.todos.todos;
+    let isTutor = state.profile.isTutor;
+    return {todos, isTutor};
 }
 
 export default connect(mapStateToProps, { setTodos })(Todos)

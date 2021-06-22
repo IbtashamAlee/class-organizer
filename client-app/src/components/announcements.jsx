@@ -67,10 +67,11 @@ class Announcements extends React.Component {
     render () {
         return(
             <div>
+                {this.props.isTutor &&
                 <ValidatorForm
                     onSubmit={this.postAnnouncement}
                     onError={errors => console.log(errors)}
-                    className="flex justify-center items-center w-full"
+                    className="flex justify-center items-center w-full mb-5"
                 >
                     <div className="block w-full">
                         <TextValidator
@@ -92,7 +93,8 @@ class Announcements extends React.Component {
                         </Button>
                     </div>
                 </ValidatorForm>
-                <div className="flow-root mt-6">
+                }
+                <div className="flow-root">
                     <ul className="-my-5 divide-y divide-gray-200">
                         {this.props.announcements &&
                             this.props.announcements.map((item) => (
@@ -104,16 +106,18 @@ class Announcements extends React.Component {
                                                 {item.announcement}
                                             </p>
                                         </div>
-                                        <div className="flex space-x-3">
-                                            <div className="text-green-500 inline-block">
-                                                <EditDetail type="announcement" id={item.id} classId={this.props.classid}/>
+                                        {this.props.isTutor &&
+                                            <div className="flex space-x-3">
+                                                <div className="text-green-500 inline-block">
+                                                    <EditDetail type="announcement" id={item.id} classId={this.props.classid}/>
+                                                </div>
+                                                <div className="text-red-500 inline-block">
+                                                    <IconButton size="small" color="inherit" className="text-white" value={item.id} onClick={this.deleteAnnouncement}>
+                                                        <DeleteIcon style={{color: 'inherit'}}/>
+                                                    </IconButton>
+                                                </div>
                                             </div>
-                                            <div className="text-red-500 inline-block">
-                                                <IconButton size="small" color="inherit" className="text-white" value={item.id} onClick={this.deleteAnnouncement}>
-                                                    <DeleteIcon style={{color: 'inherit'}}/>
-                                                </IconButton>
-                                            </div>
-                                        </div>
+                                        }
                                     </div>
                                 </li>
                             ))
@@ -129,8 +133,9 @@ class Announcements extends React.Component {
 
 
 const mapStateToProps = (state) => {
-    let announcements = state.announcements.announcements
-    return {announcements};
+    let announcements = state.announcements.announcements;
+    let isTutor = state.profile.isTutor;
+    return {announcements, isTutor}
 }
 
 export default connect(mapStateToProps, { setAnnouncements })(Announcements)
