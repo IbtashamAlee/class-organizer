@@ -34,7 +34,7 @@ class Dashboard extends React.Component {
 
     render() {
         return(
-            <div>
+            <div className="mb-10">
                 <Header/>
                 <div className="text-gray-900 text-2xl font-medium mb-3 mt-24 xl:mt-10 md:max-w-3xl lg:max-w-6xl mx-auto max-w-xs">
                     <p>All Classes</p>
