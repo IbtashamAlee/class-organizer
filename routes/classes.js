@@ -10,6 +10,10 @@ const isStudent = require('../middlewares/is-student')
 
 // add new class
 router.post('/', checkToken, isTutor, async (req, res) => {
+    if (!req.tutor) {
+        res.sendStatus(403);
+        return;
+    }
     let addClass = new Class({
         name: req.body.name,
         userid: getId(req.token),
@@ -26,6 +30,10 @@ router.post('/', checkToken, isTutor, async (req, res) => {
 
 // delete class
 router.delete('/', checkToken, isTutor, async (req, res) => {
+    if (!req.tutor) {
+        res.sendStatus(403);
+        return;
+    }
     await Class.findOne({_id: req.body.class_id}).then(delClass => {
         delClass.remove();
         res.sendStatus(200);

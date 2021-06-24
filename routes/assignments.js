@@ -5,6 +5,7 @@ let checkToken = require('../middlewares/token-checker');
 let Class = require('../models/ClassSchema');
 let Counter = require('../models/CounterSchema');
 const isTutor = require('../middlewares/is-tutor');
+const isStudent = require('../middlewares/is-student');
 
 const avatar = multer({
     limits:{
@@ -18,22 +19,27 @@ const avatar = multer({
 })
 
 router.post('/assignment',checkToken, isTutor, avatar.single('file'),async (req,res) =>{
+    if (!req.tutor) {
+        res.sendStatus(403);
+        return;
+    }
     let _class;
-    console.log(req.file)
     await Class.findOne({_id: req.body.class_id }).then(async (result) => {
         _class = result;
-        console.log(_class);
         await Counter.findByIdAndUpdate({_id: req.body.class_id}, {$inc: { assignment_counter: 1} }, {new: true, upsert: true}).then(function(count) {
         }).catch(err =>{
             console.log(err);
         })
 
         await Counter.findOne({_id: req.body.class_id}).then(async result => {
+            let extension = req.file.originalname.split('.').pop();
             _class.assignments.push({
                 id: result.assignment_counter,
                 assignment: req.file.buffer,
                 filename: req.file.originalname,
-                mimetype: req.file.mimetype
+                mimetype: req.file.mimetype,
+                filetype: extension,
+                title: req.body.title
             });
             _class.save();
             res.sendStatus(200);
@@ -74,14 +80,39 @@ router.post('/assignment',checkToken, isTutor, avatar.single('file'),async (req,
 
 })*/
 
-router.get('/assignment/:classid', async (req, res) => {
+/*router.get('/assignment/:classid', async (req, res) => {
     let assignments;
     await Class.findOne({_id: req.params.classid}).then(async classes => {
         assignments = classes.assignments;
-        res.set('Content-Type',assignments[3].mimetype)
-        res.send(assignments[3].assignment);
+        res.set('Content-Type',assignments[1].mimetype)
+        res.send(assignments[1].assignment);
+    }).catch(err => {
+        res.sendStatus(404);
+    });
+})*/
+
+router.get('/assignment/:classid', isStudent, async (req, res) => {
+    let allAssignments = [];
+    let assignments;
+    await Class.findOne({_id: req.params.classid}).then(async classes => {
+        assignments = classes.assignments;
+
+        for (let i = 0; i < assignments.length; i++) {
+            allAssignments.push({
+                id: assignments[i].id,
+                _id: assignments[i]._id,
+                title: assignments[i].title,
+                filename:  assignments[i].filename,
+                mimetype:  assignments[i].mimetype,
+                filetype:  assignments[i].filetype
+            })
+        }
+
+        res.send(allAssignments);
+
     }).catch(err => {
         res.sendStatus(404);
     });
 })
+
 module.exports = router;

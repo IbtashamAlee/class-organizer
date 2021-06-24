@@ -31,8 +31,10 @@ const ClassSchema = mongoose.Schema({
         {
             id: Number,
             assignment: Buffer,
+            title: String,
             filename: String,
-            mimetype: String
+            mimetype: String,
+            filetype: String
         }
     ]
 })
