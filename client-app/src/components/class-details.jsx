@@ -87,7 +87,7 @@ export default function ClassDetails(props) {
                             <Todos classid={id}/>
                         </TabPanel>
                         <TabPanel value={value} index={2} dir={theme.direction}>
-                            <Resources/>
+                            <Resources classid={id}/>
                         </TabPanel>
                     </SwipeableViews>
                 </div>

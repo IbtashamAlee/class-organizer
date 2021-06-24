@@ -109,7 +109,7 @@ class Announcements extends React.Component {
                                         {this.props.isTutor &&
                                             <div className="flex space-x-3">
                                                 <div className="text-green-500 inline-block">
-                                                    <EditDetail type="announcement" id={item.id} classId={this.props.classid}/>
+                                                    <EditDetail type="announcement" id={item.id} info={item.announcement} classId={this.props.classid}/>
                                                 </div>
                                                 <div className="text-red-500 inline-block">
                                                     <IconButton size="small" color="inherit" className="text-white" value={item.id} onClick={this.deleteAnnouncement}>

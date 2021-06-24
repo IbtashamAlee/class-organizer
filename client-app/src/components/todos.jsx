@@ -110,7 +110,7 @@ class Todos extends React.Component {
                                     {this.props.isTutor &&
                                     <div className="flex space-x-3">
                                         <div className="text-green-500 inline-block">
-                                            <EditDetail type="todo" id={item.id} classId={this.props.classid}/>
+                                            <EditDetail type="todo" id={item.id} classId={this.props.classid} info={item.todo}/>
                                         </div>
                                         <div className="text-red-500 inline-block">
                                             <IconButton size="small" color="inherit" className="text-white" value={item.id} onClick={this.deletetodo}>
