@@ -32,6 +32,7 @@ const ClassSchema = mongoose.Schema({
             id: Number,
             assignment: Buffer,
             title: String,
+            description: String,
             filename: String,
             mimetype: String,
             filetype: String
