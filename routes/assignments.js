@@ -104,7 +104,8 @@ router.get('/assignment/:classid', isStudent, async (req, res) => {
                 title: assignments[i].title,
                 filename:  assignments[i].filename,
                 mimetype:  assignments[i].mimetype,
-                filetype:  assignments[i].filetype
+                filetype:  assignments[i].filetype,
+                description: assignments[i].description
             })
         }
 
