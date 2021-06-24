@@ -39,7 +39,8 @@ router.post('/assignment',checkToken, isTutor, avatar.single('file'),async (req,
                 filename: req.file.originalname,
                 mimetype: req.file.mimetype,
                 filetype: extension,
-                title: req.body.title
+                title: req.body.title,
+                description: req.body.description
             });
             _class.save();
             res.sendStatus(200);

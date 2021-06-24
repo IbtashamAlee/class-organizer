@@ -14,7 +14,7 @@ import {setTodos} from "../redux/actions/todosAction";
 
 export default function EditDetail(props) {
     const [open, setOpen] = React.useState(false);
-    const [newDetail, setNewDetail] = React.useState('');
+    const [newDetail, setNewDetail] = React.useState(props.info);
     let dispatch = useDispatch();
 
     const handleClickOpen = () => {
