@@ -11,6 +11,7 @@ import Header from "./layout/header";
 import Announcements from "./announcements";
 import { useParams} from "react-router-dom";
 import Todos from "./todos";
+import Resources from "./resources";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -86,7 +87,7 @@ export default function ClassDetails(props) {
                             <Todos classid={id}/>
                         </TabPanel>
                         <TabPanel value={value} index={2} dir={theme.direction}>
-                            Item Three
+                            <Resources/>
                         </TabPanel>
                     </SwipeableViews>
                 </div>
