@@ -161,7 +161,6 @@ router.get("/me/profile", checkToken, async (req, res) => {
 router.post('/classes', checkToken, async (req,res) => {
     let userid = getId(req.token);
     User.findById(userid).then(user => {
-        console.log(user)
         user.classes.push(req.body.class_id);
         user.save().then(() => {
             res.sendStatus(200)

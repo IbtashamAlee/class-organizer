@@ -6,6 +6,8 @@ let Class = require('../models/ClassSchema');
 let Counter = require('../models/CounterSchema');
 const isTutor = require('../middlewares/is-tutor');
 const isStudent = require('../middlewares/is-student');
+let getId = require('../validation-functions/get-id');
+let User = require('../models/UserSchema');
 
 const avatar = multer({
     limits:{
@@ -52,45 +54,7 @@ router.post('/assignment',checkToken, isTutor, avatar.single('file'),async (req,
     })
 },(err,req,res,next) => res.status(404).send({error:err}))
 
-/*router.post('/assignment/:class_id',checkToken, isTutor, avatar.single('avatar'),async (req,res) =>{
-    let _class;
-    console.log(req.file)
-    await Class.findOne({_id: req.params.class_id }).then(async (result) => {
-        _class = result;
-        console.log(_class);
-        await Counter.findByIdAndUpdate({_id: req.params.class_id}, {$inc: { assignment_counter: 1} }, {new: true, upsert: true}).then(function(count) {
-        }).catch(err =>{
-            console.log(err);
-        })
 
-        await Counter.findOne({_id: req.params.class_id}).then(async result => {
-            _class.assignments.push({
-                id: result.assignment_counter,
-                assignment: req.file.buffer,
-                filename: req.file.originalname,
-                mimetype: req.file.mimetype
-            });
-            _class.save();
-            res.sendStatus(200);
-        }).catch(err => {
-            console.log(err);
-        });
-    }).catch(err => {
-        res.status(404).send("Class not found!");
-    })
-
-})*/
-
-/*router.get('/assignment/:classid', async (req, res) => {
-    let assignments;
-    await Class.findOne({_id: req.params.classid}).then(async classes => {
-        assignments = classes.assignments;
-        res.set('Content-Type',assignments[1].mimetype)
-        res.send(assignments[1].assignment);
-    }).catch(err => {
-        res.sendStatus(404);
-    });
-})*/
 
 router.get('/assignment/:classid', isStudent, async (req, res) => {
     let allAssignments = [];
@@ -115,6 +79,41 @@ router.get('/assignment/:classid', isStudent, async (req, res) => {
     }).catch(err => {
         res.sendStatus(404);
     });
+})
+
+router.get('/assignment/:classid/:assignmentid',checkToken, isTutor, isStudent, async (req, res) => {
+    if (req.tutor) {
+        let allAssignments = [];
+        let assignments;
+        Class.findOne({_id: req.params.classid}).then(async classes => {
+            assignments = classes.assignments;
+            allAssignments = assignments.filter(item => item._id == req.params.assignmentid);
+            res.set('Content-Type',allAssignments[0].mimetype)
+            res.send(allAssignments[0].assignment);
+            return
+        }).catch(err => {
+            res.sendStatus(404);
+        });
+    } else {
+        let userid = getId(req.token);
+        User.findById(userid).then(user => {
+            let inClass = user.classes.filter(item => item == req.params.classid);
+            if(inClass.length === 1) {
+                let allAssignments = [];
+                let assignments;
+                Class.findOne({_id: req.params.classid}).then(async classes => {
+                    assignments = classes.assignments;
+                    allAssignments = assignments.filter(item => item._id == req.params.assignmentid);
+                    res.set('Content-Type',allAssignments[0].mimetype)
+                    res.send(allAssignments[0].assignment);
+                }).catch(err => {
+                    res.sendStatus(404);
+                });
+            } else {
+                res.sendStatus(403);
+            }
+        })
+    }
 })
 
 module.exports = router;

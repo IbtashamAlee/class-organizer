@@ -13,6 +13,7 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import Api from "../../generics-services/api";
 import {useDispatch, useSelector} from "react-redux";
 import { setClasses } from '../../redux/actions/classesActions'
+import ClassCodeDialog from "./class-code";
 
 const useStyles = makeStyles({
     root: {
@@ -73,9 +74,7 @@ export default function MediaCard(props) {
                 </CardActionArea>
             </Link>
             <CardActions className="flex justify-between">
-                <Button size="small" color="primary">
-                    Open
-                </Button>
+                <ClassCodeDialog classid={props.classId}/>
                 {isTutor &&
                     <div className="text-red-500">
                         <IconButton size="small" color="inherit" onClick={deleteClass}>

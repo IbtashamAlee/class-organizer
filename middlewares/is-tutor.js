@@ -14,7 +14,7 @@ async function isTutor(req, res, next) {
         userid = token.id;
     }
     await User.findById(userid).then((user) => {
-        if (user.isTutor) {
+        if (user && user.isTutor) {
             req.tutor = true;
             next();
         } else {
