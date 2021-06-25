@@ -59,17 +59,6 @@ export default function ClassCodeDialog(props) {
         setOpen(false);
     };
 
-
-    const copyMeOnClipboard = () => {
-        const copyText = document.querySelector("#copyMe")
-        const showText = document.querySelector("p");
-        copyText.select()
-        copyText.setSelectionRange(0, 99999) // used for mobile phone
-        document.execCommand("copy")
-        showText.innerText = `${copyText.value} is copied`
-        console.log(showText)
-    }
-
     return (
         <div>
             <Button size="small" color="primary" onClick={handleClickOpen}>
