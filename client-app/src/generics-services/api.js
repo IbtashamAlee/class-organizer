@@ -2,15 +2,14 @@ import axios from "axios";
 import qs from "qs";
 import auth from "../auth";
 
-const authAxios = axios.create({
-    headers: {
-        Authorization: `Bearer ${localStorage.getItem('access_token')}`
-    }
-})
-
 class Api {
     execute(url,method, dataobject={}) {
         return new Promise(function (resolve, reject) {
+            const authAxios = axios.create({
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('access_token')}`
+                }
+            })
             authAxios({
                 method: method,
                 url: url,

@@ -32,6 +32,10 @@ class Dashboard extends React.Component {
         this.getUserProfile();
     }
 
+    componentWillUnmount() {
+        this.props.setClasses([]);
+    }
+
     render() {
         return(
             <div className="mb-10">
