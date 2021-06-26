@@ -13,11 +13,19 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    fullname: String,
-    username: String,
-    avatar: String,
+    avatar: {
+        type: String || Buffer,
+        default: 'https://tuk-cdn.s3.amazonaws.com/assets/components/horizontal_navigation/hn_2.png'
+    },
+    fullname: {
+        type: String,
+        required: true
+    },
     contact: String,
     websiteUrl: String,
+    classes: {
+        type: Array
+    }
 })
 
 module.exports = User = mongoose.model('userschema', userSchema);

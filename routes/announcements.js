@@ -5,10 +5,12 @@ let router = express.Router();
 let Class = require('../models/ClassSchema');
 let Counter = require('../models/CounterSchema');
 const isTutor = require('../middlewares/is-tutor');
+const isStudent = require('../middlewares/is-student');
+
 
 
 //get Announcements
-router.get('/announcement/:classid', checkToken, async (req, res) => {
+router.get('/announcements/:classid', checkToken, isStudent, async (req, res) => {
     let announcements;
     await Class.findOne({_id: req.params.classid}).then(async classes => {
         announcements = classes.announcements;
@@ -23,8 +25,11 @@ router.get('/announcement/:classid', checkToken, async (req, res) => {
 
 // add new announcement
 router.post('/announcement', checkToken, isTutor, async (req, res) => {
+    if (!req.tutor) {
+        res.sendStatus(403);
+        return;
+    }
     let _class;
-
     await Class.findOne({_id: req.body.class_id }).then(async (result) => {
         _class = result;
         await Counter.findByIdAndUpdate({_id: req.body.class_id}, {$inc: { announcement_counter: 1} }, {new: true, upsert: true}).then(function(count) {

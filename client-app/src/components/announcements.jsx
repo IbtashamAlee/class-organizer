@@ -1,24 +1,29 @@
 import React from "react";
 import Announcement from '@material-ui/icons/Announcement';
-import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import Button from "@material-ui/core/Button";
 import DeleteIcon from '@material-ui/icons/Delete';
 import Api from '../generics-services/api';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
+import IconButton from "@material-ui/core/IconButton";
+import EditDetail from "./edit-announcement-todo";
+import {connect} from "react-redux";
+import {setAnnouncements} from "../redux/actions/announcementsAction";
 
-export default class Announcements extends React.Component {
+class Announcements extends React.Component {
     constructor(props) {
         super(props);
-        this.updateAnnouncement = this.updateAnnouncement.bind(this);
         this.getAnnouncements = this.getAnnouncements.bind(this);
         this.deleteAnnouncement = this.deleteAnnouncement.bind(this);
         this.postAnnouncement = this.postAnnouncement.bind(this);
 
         this.state = {
             announcements: '',
-            updateAnnouncement: '',
             addAnnouncement: '',
         }
+    }
+
+    componentWillUnmount() {
+        this.props.setAnnouncements([]);
     }
 
     componentDidMount() {
@@ -28,8 +33,8 @@ export default class Announcements extends React.Component {
     }
 
     getAnnouncements() {
-        Api.execute('/classes/announcement/' + this.props.classid, 'get').then((res) => {
-            this.setState({announcements: res.data})
+        Api.execute('/classes/announcements/' + this.props.classid, 'get').then((res) => {
+            this.props.setAnnouncements(res.data)
         }).catch((err) => {
             console.log(err);
         })
@@ -59,26 +64,14 @@ export default class Announcements extends React.Component {
         })
     }
 
-    updateAnnouncement(e) {
-        e.preventDefault();
-        Api.execute('/classes/announcement', 'put', {
-            class_id: this.props.classid,
-            announcement_id: e.currentTarget.value,
-            announcement: this.state.updateAnnouncement
-        }).then((res) => {
-            this.getAnnouncements();
-        }).catch((err) => {
-            console.log(err);
-        })
-    }
-
     render () {
         return(
             <div>
+                {this.props.isTutor &&
                 <ValidatorForm
                     onSubmit={this.postAnnouncement}
                     onError={errors => console.log(errors)}
-                    className="flex justify-center items-center w-full"
+                    className="flex justify-center items-center w-full mb-5"
                 >
                     <div className="block w-full">
                         <TextValidator
@@ -100,30 +93,31 @@ export default class Announcements extends React.Component {
                         </Button>
                     </div>
                 </ValidatorForm>
-                <div className="flow-root mt-6">
+                }
+                <div className="flow-root">
                     <ul className="-my-5 divide-y divide-gray-200">
-                        {this.state.announcements &&
-                            this.state.announcements.map((item) => (
+                        {this.props.announcements &&
+                            this.props.announcements.map((item) => (
                                 <li className="py-5" key={item.id}>
                                     <div className="relative flex justify-between items-center focus-within:ring-2 focus-within:ring-indigo-500">
-                                        <div className="flex items-center">
-                                            <Announcement color="action" fontSize="large" className="mr-4"/>
+                                        <div className="flex items-center justify-center">
+                                            <Announcement color="action" fontSize="large" className="mr-4 p-1 mt-1"/>
                                             <p className=" text-base text-gray-600 line-clamp-2">
                                                 {item.announcement}
                                             </p>
                                         </div>
-                                        <div>
-                                            <div className="text-green-500 inline-block">
-                                                <Button size="small" color="inherit" className="text-white" value={item.id} onClick={this.updateAnnouncement}>
-                                                    <EditOutlinedIcon style={{color: 'inherit'}}/>
-                                                </Button>
+                                        {this.props.isTutor &&
+                                            <div className="flex space-x-3">
+                                                <div className="text-green-500 inline-block">
+                                                    <EditDetail type="announcement" id={item.id} info={item.announcement} classId={this.props.classid}/>
+                                                </div>
+                                                <div className="text-red-500 inline-block">
+                                                    <IconButton size="small" color="inherit" className="text-white" value={item.id} onClick={this.deleteAnnouncement}>
+                                                        <DeleteIcon style={{color: 'inherit'}}/>
+                                                    </IconButton>
+                                                </div>
                                             </div>
-                                            <div className="text-red-500 inline-block">
-                                                <Button size="small" color="inherit" className="text-white" value={item.id} onClick={this.deleteAnnouncement}>
-                                                    <DeleteIcon style={{color: 'inherit'}}/>
-                                                </Button>
-                                            </div>
-                                        </div>
+                                        }
                                     </div>
                                 </li>
                             ))
@@ -136,3 +130,12 @@ export default class Announcements extends React.Component {
         )
     }
 }
+
+
+const mapStateToProps = (state) => {
+    let announcements = state.announcements.announcements;
+    let isTutor = state.profile.isTutor;
+    return {announcements, isTutor}
+}
+
+export default connect(mapStateToProps, { setAnnouncements })(Announcements)

@@ -10,6 +10,8 @@ import Dashboard from "./components/dashboard";
 import {ProtectedRoute} from "./protected-route";
 import {EnrouteToDashboard} from "./redirect-to-dashboard";
 import ClassDetails from "./components/class-details";
+import Profile from "./components/profile";
+import ShowResource from "./components/show-resource";
 
 function App() {
     return (
@@ -22,8 +24,9 @@ function App() {
                 <EnrouteToDashboard path="/signup" component={SignUp} />
 
                 <ProtectedRoute exact path="/dashboard" component={Dashboard} />
-                <ProtectedRoute exact path="/class-details" component={ClassDetails} />
-
+                <ProtectedRoute exact path="/class-details/:id" component={ClassDetails} />
+                <ProtectedRoute exact path="/profile" component={Profile}/>
+                <Route path="/:classid/:assignmentid" component={ShowResource}/>
                 <EnrouteToDashboard path="/" component={Home} />
 
                 <Redirect to="/not-found"/>

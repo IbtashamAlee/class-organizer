@@ -3,7 +3,10 @@ let router = express.Router();
 var passport = require("passport");
 let User = require('../models/UserSchema')
 const jsonwt = require("jsonwebtoken");
-var bcrypt = require('bcrypt')
+var bcrypt = require('bcrypt');
+var checkToken = require('../middlewares/token-checker')
+var getId = require('../validation-functions/get-id');
+var Class = require('../models/ClassSchema')
 
 router.post("/signup", async (req, res) => {
     let tutor = false;
@@ -13,7 +16,8 @@ router.post("/signup", async (req, res) => {
     var newUser = new User({
         email: req.body.email,
         password: req.body.password,
-        isTutor: tutor
+        isTutor: tutor,
+        fullname: req.body.fullname
     });
 
     await User.findOne({email: newUser.email})
@@ -25,10 +29,11 @@ router.post("/signup", async (req, res) => {
                         console.log("Error is", err.message);
                     } else {
                         newUser.password = hash;
+                        console.log("hashed : ", hash);
                         await newUser
                             .save()
                             .then(() => {
-                                res.status(200);
+                                res.sendStatus(200);
                             })
                             .catch(err => {
                                 console.log("Error is ", err.message);
@@ -137,4 +142,50 @@ router.get(
         });
     }
 );
+
+router.get('/a', async (req, res) => {
+    await User.findById('60d51d02ece3440853ad9958').then(user => {
+        console.log(user);
+        user.email = 'student@gmail.com'
+        user.save();
+        res.sendStatus(200)
+    }).catch(err => {
+        console.log(err);
+    })
+})
+
+
+router.get("/me/profile", checkToken, async (req, res) => {
+    User.findById((getId(req.token))).then(user => {
+        user = {
+            "_id": user._id,
+            "email": user.email,
+            "isTutor": user.isTutor,
+            "fullname": user.fullname,
+        }
+        res.send(user);
+    }).catch(err => {
+        res.sendStatus(404)
+    })
+});
+
+router.post('/classes', checkToken, async (req,res) => {
+    let userid = getId(req.token);
+    User.findById(userid).then(user => {
+        let filterClass = user.classes.filter(item => item === req.body.class_id);
+        console.log(filterClass)
+        if (filterClass.length === 0) {
+            user.classes.push(req.body.class_id);
+        }
+        user.save().then(() => {
+            res.sendStatus(200)
+        }).catch((err) => {
+            console.log(err);
+            res.sendStatus(409);
+        });
+    }).catch(err => {
+        res.sendStatus(404);
+    })
+})
+
 module.exports = router;

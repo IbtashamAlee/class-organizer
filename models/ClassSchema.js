@@ -22,7 +22,7 @@ const ClassSchema = mongoose.Schema({
         }
     ],
     image: {
-        type: String,
+        type: String || Buffer,
         default: "https://www.gstatic.com/classroom/themes/img_code.jpg"
     },
     section: String,
@@ -31,8 +31,11 @@ const ClassSchema = mongoose.Schema({
         {
             id: Number,
             assignment: Buffer,
+            title: String,
+            description: String,
             filename: String,
-            mimetype: String
+            mimetype: String,
+            filetype: String
         }
     ]
 })
