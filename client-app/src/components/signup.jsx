@@ -58,6 +58,16 @@ class SignUp extends React.Component{
 
         })
     }
+
+    componentDidMount() {
+        ValidatorForm.addValidationRule('isPassword6Char', (value) => {
+            if (this.state.password.length < 6) {
+                return false;
+            }
+            return true;
+        });
+    }
+
     render() {
         return (
             <div>
@@ -114,8 +124,8 @@ class SignUp extends React.Component{
                                         type="password"
                                         autoComplete="current-password"
                                         variant="outlined"
-                                        validators={['required']}
-                                        errorMessages={['This field is required']}
+                                        validators={['required', 'isPassword6Char']}
+                                        errorMessages={['This field is required', 'Password must be 6 characters long']}
                                     />
                                 </div>
                                 {this.state.error_text ?
